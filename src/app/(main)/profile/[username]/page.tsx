@@ -13,7 +13,7 @@ const mockUser = {
   username: 'critical_thinker',
   firstName: 'John',
   lastName: 'Doe',
-  avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=john',
+  avatarUrl: '/icons/user.png',
   bio: 'Passionate about evidence-based discussions',
 }
 

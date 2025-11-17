@@ -5,6 +5,8 @@ import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { FlagIcon, QuestionMarkIcon, LinkIcon } from '@/components/ui/Icons'
 import { ApproveModal } from './ApproveModal'
+import { RejectModal } from './RejectModal'
+import { EscalateModal } from './EscalateModal'
 
 export interface ModerationItem {
   id: string
@@ -46,6 +48,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   onEscalate,
 }) => {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+  const [isEscalateModalOpen, setIsEscalateModalOpen] = useState(false)
 
   if (!item) return null
 
@@ -58,17 +62,37 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     onApprove()
   }
 
+  const handleRejectClick = () => {
+    setIsRejectModalOpen(true)
+  }
+
+  const handleRejectConfirm = () => {
+    setIsRejectModalOpen(false)
+    onReject()
+  }
+
+  const handleEscalateClick = () => {
+    setIsEscalateModalOpen(true)
+  }
+
+  const handleEscalateConfirm = () => {
+    setIsEscalateModalOpen(false)
+    if (onEscalate) {
+      onEscalate()
+    }
+  }
+
   return (
     <>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
         size="xl"
-        showCloseButton={true}
+        showCloseButton={false}
       >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 py-6">
         {/* Left Section: Claim Content */}
-        <div className="space-y-5 border-r border-gray-200 pr-8">
+        <div className="space-y-5">
           <h2 className="text-xl font-semibold text-[#030303] mb-5">Claim Content</h2>
           
           <div className="space-y-4">
@@ -77,7 +101,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               <span>{item.date}</span>
             </div>
             
-            <h3 className="text-xl font-bold text-blue-600 leading-tight">
+            <h3 className="text-xl font-semibold text-blue-600 leading-tight">
               {item.title}
             </h3>
             
@@ -101,16 +125,19 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             </div>
             
             {item.link && (
-              <div className="flex items-center space-x-2 text-sm text-blue-600 pt-2">
+              <div className="text-gray-600 flex items-center space-x-2 text-sm pt-2">
                 <LinkIcon className="w-4 h-4" />
-                <span className="break-all">Link: {item.link}</span>
+                <span className="break-all">Link:</span>
+                <div className=" text-blue-600">
+                {item.link}
+                </div>
               </div>
             )}
           </div>
         </div>
         
         {/* Right Section: Metadata */}
-        <div className="space-y-5">
+        <div className="space-y-5 border-l border-gray-200 pl-8">
           <h2 className="text-xl font-semibold text-[#030303] mb-5">Metadata</h2>
           
           <div className="space-y-4 text-sm">
@@ -176,7 +203,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             <Button
               variant="danger"
               size="baseFull"
-              onClick={onReject}
+              onClick={handleRejectClick}
               className="w-full"
             >
               Reject and log violation
@@ -185,7 +212,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             <Button
               variant="outline"
               size="baseFull"
-              onClick={onEscalate || (() => console.log('Escalate to legal'))}
+              onClick={handleEscalateClick}
               className="w-full border-blue-500 text-blue-600 hover:bg-blue-50"
             >
               Escalate to legal
@@ -199,6 +226,18 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       isOpen={isApproveModalOpen}
       onClose={() => setIsApproveModalOpen(false)}
       onConfirm={handleApproveConfirm}
+    />
+
+    <RejectModal
+      isOpen={isRejectModalOpen}
+      onClose={() => setIsRejectModalOpen(false)}
+      onConfirm={handleRejectConfirm}
+    />
+
+    <EscalateModal
+      isOpen={isEscalateModalOpen}
+      onClose={() => setIsEscalateModalOpen(false)}
+      onConfirm={handleEscalateConfirm}
     />
     </>
   )

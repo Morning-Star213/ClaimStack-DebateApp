@@ -70,9 +70,9 @@ export const Header: React.FC = () => {
             
             {/* User Avatar */}
             <Link href="/profile" className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+              <div className="w-10 h-10 rounded-full border border-blue-500 flex items-center justify-center overflow-hidden">
                 <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
+                  src="/icons/user.png"
                   alt="User avatar"
                   className="w-full h-full object-cover"
                 />

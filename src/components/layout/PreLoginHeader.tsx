@@ -55,7 +55,7 @@ export const PreLoginHeader: React.FC = () => {
               >
                 <button
                   type="button"
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                     isCategoriesHovered
                       ? 'text-blue-600 bg-blue-50 border border-blue-600'
                       : 'text-gray-900 hover:text-gray-700'
@@ -66,13 +66,13 @@ export const PreLoginHeader: React.FC = () => {
 
                 {/* Categories Dropdown */}
                 {isCategoriesHovered && (
-                  <div className="absolute top-full left-0 mt-2 w-[700px] bg-white rounded-2xl shadow-xl border border-gray-200 p-6 z-50">
+                  <div className="absolute top-full left-0 mt-2 w-[900px] bg-white rounded-2xl shadow-xl border border-gray-200 p-6 z-50">
                     <div className="grid grid-cols-4 gap-x-6 gap-y-3">
                       {categories.map((category) => (
                         <Link
                           key={category}
                           href={`/browse?category=${encodeURIComponent(category)}`}
-                          className={`px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap ${
+                          className={`px-6 py-2 rounded-lg text-sm transition-colors whitespace-nowrap ${
                             hoveredCategory === category
                               ? 'bg-blue-50 text-blue-600'
                               : 'text-gray-700 hover:bg-gray-50'
