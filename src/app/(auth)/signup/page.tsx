@@ -48,7 +48,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex w-full max-w-[1440px] mx-auto">
       {/* Left Side - Artwork */}
-      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden">
+      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden bg-gray-50">
         <div className="absolute inset-0 flex items-center justify-center">
           <Image
             src="/images/login.png"
@@ -63,24 +63,24 @@ export default function SignupPage() {
       </div>
 
       {/* Right Side - Signup Form */}
-      <div className="w-full lg:w-1/3 flex flex-col p-8">
+      <div className="w-full lg:w-1/3 flex flex-col p-4 sm:p-6 lg:p-8">
         {/* Logo - Top Center of Right Side */}
-        <div className="flex justify-center pt-14">
+        <div className="flex justify-center pt-6 sm:pt-10 lg:pt-14">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-lg font-semibold text-gray-600">C</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <span className="text-base sm:text-lg font-semibold text-gray-600">C</span>
             </div>
-            <span className="text-base font-semibold text-gray-900">ClaimstackAI</span>
+            <span className="text-sm sm:text-base font-semibold text-gray-900">ClaimstackAI</span>
           </div>
         </div>
 
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center py-4 sm:py-8">
           <div className="w-full max-w-md">
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold text-gray-900 text-center">Sign Up</h1>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 text-center">Sign Up</h1>
             </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <Input
               placeholder="First Name"
               className='rounded-full'
@@ -153,9 +153,9 @@ export default function SignupPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full flex items-center justify-center space-x-2 rounded-full"
+                className="w-full flex items-center justify-center space-x-2 rounded-full text-sm sm:text-base"
               >
-                <GoogleIcon className="w-5 h-5" />
+                <GoogleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Sign Up With Google</span>
               </Button>
             </div>
@@ -170,9 +170,9 @@ export default function SignupPage() {
                     setFormData({ ...formData, agreeToTerms: e.target.checked })
                     setErrors({ ...errors, agreeToTerms: '' })
                   }}
-                  className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded flex-shrink-0"
                 />
-                <label htmlFor="agreeToTerms" className="text-sm text-gray-600">
+                <label htmlFor="agreeToTerms" className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   I agree to the{' '}
                   <Link href="/terms" className="text-blue-600 hover:text-blue-700">
                     Terms
@@ -190,8 +190,8 @@ export default function SignupPage() {
               </div>
             )} */}
 
-            <div className="flex justify-center items-center pt-14">
-              <Button type="submit" variant="primary" className="w-full rounded-full bg-[#030303] hover:bg-gray-800 text-white" isLoading={isLoading}>
+            <div className="flex justify-center items-center pt-8 sm:pt-12 lg:pt-14">
+              <Button type="submit" variant="primary" className="w-full rounded-full bg-[#030303] hover:bg-gray-800 text-white text-sm sm:text-base" isLoading={isLoading}>
                 Sign Up
               </Button>
             </div>

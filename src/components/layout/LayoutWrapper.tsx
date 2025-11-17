@@ -17,7 +17,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       {isHomePage ? <PreLoginHeader /> : <Header />}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto">{children}</main>
+      <main className="flex-1 w-full max-w-[1440px] mx-auto overflow-x-hidden">{children}</main>
       <Footer />
     </div>
   )

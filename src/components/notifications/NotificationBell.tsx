@@ -11,10 +11,10 @@ export const NotificationBell: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
+        className="relative p-1.5 sm:p-2 text-gray-600 hover:text-gray-900 transition-colors"
         aria-label="Notifications"
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -33,7 +33,7 @@ export const NotificationBell: React.FC = () => {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute mt-2 w-96 right-[-60px] bg-white rounded-2xl hover:rounded-2xl shadow-xl border border-gray-200 z-50">
+          <div className="absolute mt-2 w-[calc(100vw-2rem)] sm:w-96 right-0 sm:right-[-60px] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 max-h-[80vh] overflow-y-auto">
             <NotificationList onClose={() => setIsOpen(false)} />
           </div>
         </>

@@ -49,32 +49,32 @@ export default function BrowsePage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center mb-8">
-          <h1 className="text-[46px] font-semibold text-[#030303]">Browse The Claims</h1>
-          <div className="flex-1 max-w-full ml-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-[46px] font-semibold text-[#030303]">Browse The Claims</h1>
+          <div className="flex-1 w-full sm:max-w-full sm:ml-4 lg:ml-8">
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <SearchIcon className="w-5 h-5 text-gray-400" />
+              <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+                <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               </div>
               <input
                 type="text"
                 placeholder="Search claims, topics, or keywords..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-gray-100 border border-gray-200 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="flex items-center gap-2 flex-wrap">
             {sortOptions.map((option) => (
               <button
                 key={option.id}
                 onClick={() => setActiveTab(option.id)}
-                className={`px-4 py-[6px] rounded-full text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-[6px] rounded-full text-xs sm:text-sm font-medium transition-colors ${
                   activeTab === option.id
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -84,10 +84,14 @@ export default function BrowsePage() {
               </button>
             ))}
           </div>
-          <FilterButton onFiltersChange={handleFiltersChange} />
+          <FilterButton 
+            onFiltersChange={handleFiltersChange}
+            buttonClassName="text-xs sm:text-sm px-3 sm:px-4"
+            iconSize="w-4 h-4 sm:w-5 sm:h-5"
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {mockClaims.map((claim) => (
             <ContentCard key={claim.id} item={claim} />
           ))}
