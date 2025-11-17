@@ -140,6 +140,13 @@ export default function HomePage() {
 
   return (
     <div className="bg-gray-50 relative">
+      <div 
+        className="absolute top-0 left-0 right-0 pointer-events-none"
+        style={{
+          height: 'min(1109px, 100vh)',
+          background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
+        }}
+      />
       {/* Hero Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
