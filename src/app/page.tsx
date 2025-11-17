@@ -144,21 +144,21 @@ export default function HomePage() {
       <div 
         className="absolute top-0 left-0 right-0 pointer-events-none"
         style={{
-          height: '1109px',
+          height: 'min(1109px, 100vh)',
           background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
         }}
       />
       {/* Hero Section */}
-      <section className="py-16 relative z-10">
+      <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-[64px] md:w-2/3 mx-auto font-bold text-gray-900 mb-4 leading-[1.5]">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[64px] max-w-4xl mx-auto font-bold text-gray-900 mb-3 sm:mb-4 leading-tight sm:leading-[1.5] px-2">
               Your Claim, Strengthened By Collective Evidence.
             </h1>
-            <p className="text-2xl text-gray-600 mb-8">
-              Join Us... Choose A Side... <br/>In The Sea Of Online Debates...
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 px-4">
+              Join Us... Choose A Side... <br className="hidden sm:block"/>In The Sea Of Online Debates...
             </p>
-            <Button variant="primary" size="base" className="border border-blue-300 border-solid rounded-full " asChild>
+            <Button variant="primary" size="base" className="border border-blue-300 border-solid rounded-full px-6 sm:px-10" asChild>
               <Link href="/browse">Browse</Link>
             </Button>
           </div>
@@ -166,16 +166,16 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="pb-8 relative z-10">
+      <section className="pb-8 sm:pb-12 lg:pb-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-semibold text-gray-900 mb-4">How ClaimStack Works</h2>
-            <p className="text-xl font-medium text-gray-600 pb-[20px]">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">How ClaimStack Works</h2>
+            <p className="text-base sm:text-lg md:text-xl font-medium text-gray-600 pb-4 sm:pb-[20px] px-4">
               Choose a side, stack the evidence, and let the best argument win.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="w-full h-[350px] rounded-lg flex items-center justify-center relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+            <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] rounded-lg flex items-center justify-center relative order-2 md:order-1">
               <Image
                 src="/images/claimstack-mindshare.png"
                 alt="ClaimStack AI - Debate Platform"
@@ -183,16 +183,16 @@ export default function HomePage() {
                 className="object-contain"
                 priority
                 quality={90}
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
-            <div>
-              <p className="text-xl font-normal text-gray-700 leading-relaxed mb-4">
+            <div className="order-1 md:order-2 px-2 sm:px-0">
+              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 leading-relaxed mb-4">
                 In the sea of online debates, valuable arguments often get lost or go unheard.
                 ClaimStack simplifies these discussions, bringing both sides of any topic into
                 focus.
               </p>
-              <p className="text-xl font-normal text-gray-700 leading-relaxed mb-4">
+              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 leading-relaxed mb-4">
                 Upload link, or share evidence from videos and articles to social media posts.
                 Vote on the evidence that makes the strongest case. The best arguments rise to the
                 top, and our AI synthesizes them into clear, unbiased summaries you can trust.
@@ -203,29 +203,29 @@ export default function HomePage() {
       </section>
 
       {/* Claim Feed Section */}
-      <section className="py-16 relative z-10">
+      <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-4">Claim Feed</h2>
-          <div className="flex items-center justify-between mb-8 pt-5">
-            <div className="flex items-center space-x-4">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6">Claim Feed</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 pt-3 sm:pt-5">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap">
               <Button
                 variant="outline"
                 size="baseFull"
                 onClick={() => setActiveButton('sort')}
-                className={`flex round-full items-center space-x-2 ${
+                className={`flex round-full items-center space-x-2 text-xs sm:text-sm px-3 sm:px-4 ${
                   activeButton === 'sort'
                     ? '!border-blue-600 !text-blue-600 bg-blue-50'
                     : '!border-gray-300 bg-gray-100 !text-gray-700'
                 }`}
               >
-                <SortAscIcon className="w-4 h-4" />
+                <SortAscIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Sort</span>
               </Button>
               <Button
                 variant="outline"
                 size="baseFull"
                 onClick={() => setActiveButton('recent')}
-                className={`round-full ${
+                className={`round-full text-xs sm:text-sm px-3 sm:px-4 ${
                   activeButton === 'recent'
                     ? '!border-blue-600 !text-blue-600 bg-blue-50 font-medium'
                     : '!border-gray-300 bg-gray-100 !text-gray-700'
@@ -236,17 +236,17 @@ export default function HomePage() {
             </div>
             <FilterButton
               onFiltersChange={handleFiltersChange}
-              buttonClassName="!border-gray-300 bg-gray-100 !text-gray-700"
-              iconSize="w-4 h-4"
+              buttonClassName="!border-gray-300 bg-gray-100 !text-gray-700 text-xs sm:text-sm px-3 sm:px-4"
+              iconSize="w-3 h-3 sm:w-4 sm:h-4"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {mockClaims.map((claim) => (
               <ContentCard key={claim.id} item={claim} />
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Button variant="outline">Show More</Button>
+          <div className="text-center mt-6 sm:mt-8">
+            <Button variant="outline" className="px-6 sm:px-8">Show More</Button>
           </div>
         </div>
       </section>

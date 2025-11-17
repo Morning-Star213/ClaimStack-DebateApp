@@ -81,33 +81,35 @@ export default function ClaimDetailPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <Link
           href="/browse"
-          className="inline-flex items-center text-xl font-semibold text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center text-base sm:text-lg lg:text-xl font-semibold text-gray-600 hover:text-gray-900 mb-4 sm:mb-6"
         >
-          <ChevronLeftIcon className="w-4 h-4 mr-6" />
-          Claim Detail Page
+          <ChevronLeftIcon className="w-4 h-4 mr-3 sm:mr-6" />
+          <span className="hidden sm:inline">Claim Detail Page</span>
+          <span className="sm:hidden">Back</span>
         </Link>
 
         {/* Statement Section */}
-        <div className="bg-[#F9F9F9] rounded-[32px] border border-[#DCDCDC] p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-[#F9F9F9] rounded-2xl sm:rounded-[32px] border border-[#DCDCDC] p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div className="flex items-center space-x-2">
-              <h2 className="text-base font-normal text-[#666666]">Statement</h2>
+              <h2 className="text-sm sm:text-base font-normal text-[#666666]">Statement</h2>
             </div>
             <button 
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-gray-600 p-1"
               onClick={() => setIsSummariesExpanded(!isSummariesExpanded)}
+              aria-label="Toggle summaries"
             >
               {isSummariesExpanded ? (
-                <ChevronDownIcon className="w-5 h-5" />
+                <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               ) : (
-                <ChevronUpIcon className="w-5 h-5" />
+                <ChevronUpIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               )}
             </button>
           </div>
-          <p className="text-5xl font-semibold text-gray-900 mb-10">{mockClaim.title}</p>
+          <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6 sm:mb-10 leading-tight">{mockClaim.title}</p>
           {/* Summaries */}
           {isSummariesExpanded && (
             <ClaimSummary forSummary={mockClaim.forSummary} againstSummary={mockClaim.againstSummary} />
@@ -116,28 +118,29 @@ export default function ClaimDetailPage() {
 
 
         {/* Supporting Evidence Section */}
-        <div className="mb-8 mt-10">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-[32px] font-semibold text-gray-900">Supporting Evidence</h2>
+        <div className="mb-6 sm:mb-8 mt-6 sm:mt-10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-[32px] font-semibold text-gray-900">Supporting Evidence</h2>
             <Button
               variant="primary"
-              className="rounded-full text-sm font-[500px]"
+              className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
               onClick={() => setIsUploadModalOpen(true)}
             >
               Submit Evidence +
             </Button>
           </div>
 
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <ForAgainstToggle
               position={position}
               onChange={setPosition}
               forCount={forEvidence.length}
               againstCount={againstEvidence.length}
+              className="w-full sm:w-auto"
             />
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
               <button
-                className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors flex items-center gap-2 ${
+                className={`px-3 sm:px-4 py-2 rounded-full border text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 ${
                   sortBy === 'recent'
                     ? 'bg-white border-blue-600 text-blue-600'
                     : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
@@ -146,15 +149,19 @@ export default function ClaimDetailPage() {
               >
                 Recent
               </button>
-              <button className="px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-2">
-                <SortAscIcon className="w-4 h-4" />
+              <button className="px-3 sm:px-4 py-2 rounded-full border border-gray-300 bg-white text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-2">
+                <SortAscIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Sort</span>
               </button>
-              <FilterButton onFiltersChange={handleFiltersChange} />
+              <FilterButton 
+                onFiltersChange={handleFiltersChange}
+                buttonClassName="text-xs sm:text-sm px-3 sm:px-4"
+                iconSize="w-3 h-3 sm:w-4 sm:h-5"
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {currentEvidence.map((evidence) => (
               <ContentCard key={evidence.id} item={evidence} onVote={onVote} />
             ))}
