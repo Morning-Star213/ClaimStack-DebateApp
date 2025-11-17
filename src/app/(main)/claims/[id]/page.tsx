@@ -7,6 +7,7 @@ import { ClaimSummary } from '@/components/claims/ClaimSummary'
 import { ForAgainstToggle } from '@/components/claims/ForAgainstToggle'
 import { ContentCard } from '@/components/content/ContentCard'
 import { EvidenceUpload } from '@/components/evidence/EvidenceUpload'
+import { PerspectiveUpload } from '@/components/perspective/PerspectiveUpload'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon, FilterIcon, SortAscIcon } from '@/components/ui/Icons'
@@ -52,9 +53,10 @@ const mockEvidence: Evidence[] = Array(4).fill({
 export default function ClaimDetailPage() {
   const params = useParams()
   const [position, setPosition] = useState<'for' | 'against'>('for')
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
   const [sortBy, setSortBy] = useState('recent')
   const [isSummariesExpanded, setIsSummariesExpanded] = useState(false)
+  const [isSubmitEvidenceModalOpen, setIsSubmitEvidenceModalOpen] = useState(false)
+  const [isSubmitPerspectiveModalOpen, setIsSubmitPerspectiveModalOpen] = useState(false)
 
   const forEvidence = mockEvidence.filter((e) => e.position === 'for')
   const againstEvidence = mockEvidence.filter((e) => e.position === 'against')
@@ -121,13 +123,22 @@ export default function ClaimDetailPage() {
         <div className="mb-6 sm:mb-8 mt-6 sm:mt-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-[32px] font-semibold text-gray-900">Supporting Evidence</h2>
-            <Button
-              variant="primary"
-              className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
-              onClick={() => setIsUploadModalOpen(true)}
-            >
-              Submit Evidence +
-            </Button>
+            <div className='flex flex-row gap-2'>
+              <Button
+                variant="primary"
+                className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
+                onClick={() => setIsSubmitEvidenceModalOpen(true)}
+              >
+                Submit Evidence +
+              </Button>
+              <Button
+                variant="primary"
+                className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
+                onClick={() => setIsSubmitPerspectiveModalOpen(true)}
+              >
+                Submit Perspective +
+              </Button>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -169,16 +180,22 @@ export default function ClaimDetailPage() {
         </div>
       </div>
 
-      {/* Upload Modal */}
+      {/* Submit Evidence Modal */}
       <Modal
-        isOpen={isUploadModalOpen}
-        onClose={() => setIsUploadModalOpen(false)}
+        isOpen={isSubmitEvidenceModalOpen}
+        onClose={() => setIsSubmitEvidenceModalOpen(false)}
         title="Submit Evidence"
       >
-        <EvidenceUpload
-          onUpload={handleUpload}
-          onClose={() => setIsUploadModalOpen(false)}
-        />
+        <EvidenceUpload onUpload={handleUpload} onClose={() => setIsSubmitEvidenceModalOpen(false)} />
+      </Modal>
+
+      {/* Submit Perspective Modal */}
+      <Modal
+        isOpen={isSubmitPerspectiveModalOpen}
+        onClose={() => setIsSubmitPerspectiveModalOpen(false)}
+        title="Submit Perspective"
+      >
+        <PerspectiveUpload onUpload={handleUpload} onClose={() => setIsSubmitPerspectiveModalOpen(false)} />
       </Modal>
     </div>
   )

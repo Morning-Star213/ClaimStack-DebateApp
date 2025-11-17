@@ -30,10 +30,10 @@ export const NotificationBell: React.FC = () => {
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-40 bg-black bg-opacity-50"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute mt-2 w-[calc(100vw-2rem)] sm:w-96 right-0 sm:right-[-60px] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 max-h-[80vh] overflow-y-auto">
+          <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-[-60px] top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 overflow-y-auto">
             <NotificationList onClose={() => setIsOpen(false)} />
           </div>
         </>

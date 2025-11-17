@@ -117,12 +117,13 @@ export default function ModerationPage() {
               </button>
             ))}
           </div>
-          <FilterButton
-            onFiltersChange={handleFiltersChange}
-            buttonClassName="self-start sm:self-auto"
-            iconSize="w-4 h-4 sm:w-5 sm:h-5"
-            textSize="text-sm"
-          />
+          <div className="flex justify-end sm:justify-start">
+            <FilterButton 
+              onFiltersChange={handleFiltersChange}
+              buttonClassName="text-xs sm:text-sm px-3 sm:px-4"
+              iconSize="w-4 h-4 sm:w-5 sm:h-5"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

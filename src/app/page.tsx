@@ -140,14 +140,6 @@ export default function HomePage() {
 
   return (
     <div className="bg-gray-50 relative">
-      {/* Linear Gradient Overlay */}
-      <div 
-        className="absolute top-0 left-0 right-0 pointer-events-none"
-        style={{
-          height: 'min(1109px, 100vh)',
-          background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
-        }}
-      />
       {/* Hero Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -206,7 +198,7 @@ export default function HomePage() {
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6">Claim Feed</h2>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 pt-3 sm:pt-5">
+          <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 mb-6 sm:mb-8 pt-3 sm:pt-5 flex-wrap">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap">
               <Button
                 variant="outline"
