@@ -8,7 +8,7 @@ import { Button } from './Button'
 export interface SuccessModalProps {
   isOpen: boolean
   onClose: () => void
-  type?: 'claim' | 'evidence'
+  type?: 'claim' | 'evidence' | 'perspective'
   title?: string
   subtitle?: string
 }
@@ -22,11 +22,19 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
 }) => {
   const defaultTitle = type === 'claim' 
     ? 'Claim Submitted Successfully!' 
-    : 'Evidence Submitted'
+    : type === 'evidence'
+    ? 'Evidence Submitted'
+    : type === 'perspective'
+    ? 'Perspective Submitted'
+    : ''
   
   const defaultSubtitle = type === 'claim'
     ? 'Your claim has been posted and is now visible to others.'
-    : 'Evidence as Pending Moderation'
+    : type === 'evidence'
+    ? 'Evidence as Pending Moderation'
+    : type === 'perspective'
+    ? 'Perspective as Pending Moderation'
+    : ''
 
   return (
     <Modal

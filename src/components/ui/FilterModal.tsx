@@ -82,12 +82,12 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40"
+        className="fixed inset-0 z-40 bg-black bg-opacity-50"
         onClick={onClose}
       />
-      {/* Filter Modal - positioned absolutely below the button */}
-      <div className="absolute mt-2 w-96 right-0 bg-white rounded-2xl shadow-xl border border-gray-200 z-50">
-        <div className="flex flex-col p-6">
+      {/* Filter Modal - centered modal on mobile, dropdown on desktop */}
+      <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 overflow-y-auto">
+        <div className="flex flex-col p-4 sm:p-6">
           {/* Header with title and close button */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Filters</h2>

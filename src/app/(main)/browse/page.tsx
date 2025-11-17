@@ -69,12 +69,12 @@ export default function BrowsePage() {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 overflow-x-auto scroll-smooth scrollbar-hide">
             {sortOptions.map((option) => (
               <button
                 key={option.id}
                 onClick={() => setActiveTab(option.id)}
-                className={`px-3 sm:px-4 py-[6px] rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-[6px] rounded-full text-xs sm:text-sm font-medium transition-colors flex-shrink-0 whitespace-nowrap ${
                   activeTab === option.id
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -84,11 +84,13 @@ export default function BrowsePage() {
               </button>
             ))}
           </div>
-          <FilterButton 
-            onFiltersChange={handleFiltersChange}
-            buttonClassName="text-xs sm:text-sm px-3 sm:px-4"
-            iconSize="w-4 h-4 sm:w-5 sm:h-5"
-          />
+          <div className="flex justify-end sm:justify-start">
+            <FilterButton 
+              onFiltersChange={handleFiltersChange}
+              buttonClassName="text-xs sm:text-sm px-3 sm:px-4"
+              iconSize="w-4 h-4 sm:w-5 sm:h-5"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
