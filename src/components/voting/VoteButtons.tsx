@@ -3,6 +3,7 @@
 import React from 'react'
 import { cn } from '@/lib/utils/cn'
 import { ArrowUpIcon, ArrowDownIcon } from '@/components/ui/Icons'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
 
 export interface VoteButtonsProps {
   upvotes: number
@@ -19,10 +20,19 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   onVote,
   disabled,
 }) => {
+  const { requireAuth } = useRequireAuth()
+
+  const handleVote = (voteType: 'upvote' | 'downvote') => {
+    if (disabled) return
+    requireAuth(() => {
+      onVote?.(voteType)
+    })
+  }
+
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       <button
-        onClick={() => !disabled && onVote?.('upvote')}
+        onClick={() => handleVote('upvote')}
         disabled={disabled}
         className={cn(
           'flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border transition-colors',
@@ -36,7 +46,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         <ArrowUpIcon className="w-3 h-3 sm:w-4 sm:h-4" />
       </button>
       <button
-        onClick={() => !disabled && onVote?.('downvote')}
+        onClick={() => handleVote('downvote')}
         disabled={disabled}
         className={cn(
           'flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border transition-colors',

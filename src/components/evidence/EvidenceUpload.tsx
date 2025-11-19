@@ -9,9 +9,11 @@ import { ForAgainstToggle } from '@/components/claims/ForAgainstToggle'
 import { Button } from '@/components/ui/Button'
 import { ArrowUpIcon, CheckIcon } from '@/components/ui/Icons'
 import { SuccessModal } from '@/components/ui/SuccessModal'
+import { useEvidenceStore } from '@/store/evidenceStore'
 
 export interface EvidenceUploadProps {
-  onUpload: (data: EvidenceUploadData) => void
+  claimId: string
+  onUpload?: (data: EvidenceUploadData) => void
   onClose: () => void
   isLoading?: boolean
 }
@@ -33,19 +35,22 @@ const acceptedFormats = ['pdf', 'docx', 'jpg', 'png', 'mp4']
 const maxSize = 25 * 1024 * 1024 // 25MB
 
 export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
+  claimId,
   onUpload,
   onClose,
-  isLoading,
+  isLoading: externalLoading,
 }) => {
+  const { createEvidence, isLoading: storeLoading } = useEvidenceStore()
   const [evidenceType, setEvidenceType] = useState<'url' | 'file'>('url')
   const [url, setUrl] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [description, setDescription] = useState('')
   const [position, setPosition] = useState<'for' | 'against'>('for')
-  const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  const isLoading = externalLoading || storeLoading
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -68,46 +73,61 @@ export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
 
     setFile(selectedFile)
     setError(null)
-    setUploadProgress(0)
-
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          return 100
-        }
-        return prev + 10
-      })
-    }, 200)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (evidenceType === 'url' && !url.trim()) {
       setError('Please enter a URL')
       return
     }
-
+    
     if (evidenceType === 'file' && !file) {
       setError('Please select a file')
       return
     }
-
+    
     setError(null)
     
-    // Call onUpload callback
-    onUpload({
+    // Prepare evidence data
+    const evidenceData: any = {
       type: evidenceType,
-      url: evidenceType === 'url' ? url : undefined,
-      file: evidenceType === 'file' ? file! : undefined,
-      description,
+      description: description.trim() || undefined,
       position,
-    })
+    }
     
-    // Show success modal after a brief delay to simulate upload
-    setTimeout(() => {
+    if (evidenceType === 'url') {
+      evidenceData.url = url.trim()
+    } else if (evidenceType === 'file' && file) {
+      evidenceData.file = file
+    }
+    
+    // Create evidence using store
+    const result = await createEvidence(claimId, evidenceData)
+
+    if (result.success && result.evidence) {
+      // Call onUpload callback if provided
+      if (onUpload) {
+        onUpload({
+          type: evidenceType,
+          url: evidenceType === 'url' ? url : undefined,
+          file: evidenceType === 'file' ? file! : undefined,
+          description,
+          position,
+        })
+      }
+      
+      // Show success modal
       setIsSuccessModalOpen(true)
-    }, 500)
+      
+      // Reset form
+      setUrl('')
+      setFile(null)
+      setDescription('')
+      setPosition('for')
+      setEvidenceType('url')
+    } else {
+      setError(result.error || 'Failed to submit evidence')
+    }
   }
 
   return (

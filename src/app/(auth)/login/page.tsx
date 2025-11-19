@@ -1,24 +1,37 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { GoogleIcon } from '@/components/ui/Icons'
+import { useAuthStore } from '@/store/authStore'
+import { useUIStore } from '@/store/uiStore'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const { login, isAuthenticated, isLoading, error, clearError } = useAuthStore()
+  const { addToast } = useUIStore()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading] = useState(false)
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const redirect = searchParams.get('redirect') || '/browse'
+      router.push(redirect)
+    }
+  }, [isAuthenticated, router, searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    clearError()
     const newErrors: Record<string, string> = {}
 
     if (!formData.email) {
@@ -33,12 +46,16 @@ export default function LoginPage() {
       return
     }
 
-    setIsLoading(true)
-    // TODO: Implement actual login logic
-    setTimeout(() => {
-      setIsLoading(false)
-      router.push('/browse')
-    }, 1000)
+    const result = await login(formData.email, formData.password)
+
+    if (result.success) {
+      addToast('Successfully logged in!', 'success')
+      const redirect = searchParams.get('redirect') || '/browse'
+      router.push(redirect)
+    } else {
+      setErrors({ general: result.error || 'Login failed' })
+      addToast(result.error || 'Login failed', 'error')
+    }
   }
 
   return (
@@ -119,6 +136,11 @@ export default function LoginPage() {
                 <span>Sign In With Google</span>
               </Button>
             </div>
+            {errors.general && (
+              <div className="text-center text-sm text-red-600">
+                {errors.general}
+              </div>
+            )}
             <div className="flex justify-center items-center pt-12 lg:pt-20">
               <Button type="submit" variant="primary" className="w-full rounded-full bg-[#030303] hover:bg-gray-800 text-white text-base" isLoading={isLoading}>
                 Log In

@@ -14,6 +14,7 @@ import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon, FilterIcon, SortAscIco
 import { Evidence } from '@/lib/types'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
 
 // Mock data
 const mockClaim = {
@@ -52,6 +53,7 @@ const mockEvidence: Evidence[] = Array(4).fill({
 
 export default function ClaimDetailPage() {
   const params = useParams()
+  const { requireAuth } = useRequireAuth()
   const [position, setPosition] = useState<'for' | 'against'>('for')
   const [sortBy, setSortBy] = useState('recent')
   const [isSummariesExpanded, setIsSummariesExpanded] = useState(false)
@@ -127,14 +129,14 @@ export default function ClaimDetailPage() {
               <Button
                 variant="primary"
                 className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
-                onClick={() => setIsSubmitEvidenceModalOpen(true)}
+                onClick={() => requireAuth(() => setIsSubmitEvidenceModalOpen(true))}
               >
                 Submit Evidence +
               </Button>
               <Button
                 variant="primary"
                 className="rounded-full text-xs sm:text-sm font-medium w-full sm:w-auto"
-                onClick={() => setIsSubmitPerspectiveModalOpen(true)}
+                onClick={() => requireAuth(() => setIsSubmitPerspectiveModalOpen(true))}
               >
                 Submit Perspective +
               </Button>
@@ -186,7 +188,11 @@ export default function ClaimDetailPage() {
         onClose={() => setIsSubmitEvidenceModalOpen(false)}
         title="Submit Evidence"
       >
-        <EvidenceUpload onUpload={handleUpload} onClose={() => setIsSubmitEvidenceModalOpen(false)} />
+        <EvidenceUpload 
+          claimId={params.id as string}
+          onUpload={handleUpload} 
+          onClose={() => setIsSubmitEvidenceModalOpen(false)} 
+        />
       </Modal>
 
       {/* Submit Perspective Modal */}

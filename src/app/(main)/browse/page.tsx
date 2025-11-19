@@ -1,32 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ContentCard } from '@/components/content/ContentCard'
 import { Claim } from '@/lib/types'
 import { SearchIcon } from '@/components/ui/Icons'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
-
-// Mock data
-const mockClaims: Claim[] = Array(6).fill({
-  id: '1',
-  userId: '1',
-  title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-  description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-  status: 'approved',
-  viewCount: 1234,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  user: {
-    id: '1',
-    email: 'test@example.com',
-    username: 'evidenceHunter',
-    firstName: 'Dr. Emily',
-    lastName: 'Watson',
-    role: 'user',
-    createdAt: new Date(),
-  },
-}).map((claim, index) => ({ ...claim, id: String(index + 1) }))
+import { useClaimsStore } from '@/store/claimsStore'
 
 const sortOptions = [
   { id: 'newest', label: 'Newest' },
@@ -37,15 +17,32 @@ const sortOptions = [
 ]
 
 export default function BrowsePage() {
+  const { claims, isLoading, error, fetchApprovedClaims } = useClaimsStore()
   const [activeTab, setActiveTab] = useState('newest')
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<FilterValues | null>(null)
+
+  // Fetch approved claims on mount
+  useEffect(() => {
+    fetchApprovedClaims({ refresh: true })
+  }, [fetchApprovedClaims])
 
   const handleFiltersChange = (newFilters: FilterValues) => {
     setFilters(newFilters)
     // Apply filters to your data here
     console.log('Filters applied:', newFilters)
   }
+
+  // Filter claims based on search query
+  const filteredClaims = claims.filter((claim) => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    return (
+      claim.title.toLowerCase().includes(query) ||
+      claim.description?.toLowerCase().includes(query) ||
+      claim.user?.username.toLowerCase().includes(query)
+    )
+  })
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -93,8 +90,26 @@ export default function BrowsePage() {
           </div>
         </div>
 
+        {isLoading && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">Loading approved claims...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="text-center py-8">
+            <p className="text-red-600">Error: {error}</p>
+          </div>
+        )}
+
+        {!isLoading && !error && filteredClaims.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No approved claims found.</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {mockClaims.map((claim) => (
+          {filteredClaims.map((claim) => (
             <ContentCard key={claim.id} item={claim} />
           ))}
         </div>

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { MenuIcon, XIcon } from '@/components/ui/Icons'
+import { ProtectedLink } from '@/components/ui/ProtectedLink'
 
 const categories = [
   'Animals & Nature',
@@ -72,7 +73,7 @@ export const PreLoginHeader: React.FC = () => {
                   <div className="absolute top-full left-0 mt-2 w-[600px] xl:w-[900px] bg-white rounded-2xl shadow-xl border border-gray-200 p-4 xl:p-6 z-50">
                     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 xl:gap-x-6 gap-y-3">
                       {categories.map((category) => (
-                        <Link
+                        <ProtectedLink
                           key={category}
                           href={`/browse?category=${encodeURIComponent(category)}`}
                           className={`px-4 xl:px-6 py-2 rounded-lg text-sm transition-colors whitespace-nowrap ${
@@ -84,19 +85,19 @@ export const PreLoginHeader: React.FC = () => {
                           onMouseLeave={() => setHoveredCategory(null)}
                         >
                           {category}
-                        </Link>
+                        </ProtectedLink>
                       ))}
                     </div>
                   </div>
                 )}
               </div>
 
-              <Link
+              <ProtectedLink
                 href="/browse?sort=trending"
                 className="text-sm font-medium text-gray-900 hover:text-gray-700 transition-colors"
               >
                 Trending
-              </Link>
+              </ProtectedLink>
             </nav>
           </div>
 
@@ -150,7 +151,7 @@ export const PreLoginHeader: React.FC = () => {
                 <div className="px-4 pb-4">
                   <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
                     {categories.map((category) => (
-                      <Link
+                      <ProtectedLink
                         key={category}
                         href={`/browse?category=${encodeURIComponent(category)}`}
                         onClick={() => {
@@ -160,19 +161,19 @@ export const PreLoginHeader: React.FC = () => {
                         className="px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                       >
                         {category}
-                      </Link>
+                      </ProtectedLink>
                     ))}
                   </div>
                 </div>
               )}
 
-              <Link
+              <ProtectedLink
                 href="/browse?sort=trending"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="px-4 py-2 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
               >
                 Trending
-              </Link>
+              </ProtectedLink>
               
               <Link
                 href="/login"

@@ -79,7 +79,7 @@ export interface Category {
 export interface Notification {
   id: string
   userId: string
-  type: 'new_evidence' | 'new_comment' | 'evidence_approved' | 'evidence_rejected' | 'claim_updated' | 'new_follower' | 'vote_received'
+  type: 'new_evidence' | 'new_perspective' | 'new_comment' | 'evidence_approved' | 'evidence_rejected' | 'perspective_approved' | 'perspective_rejected' | 'claim_updated' | 'new_follower' | 'vote_received'
   title: string
   message?: string
   link?: string
@@ -87,11 +87,37 @@ export interface Notification {
   createdAt: Date
 }
 
+// Perspective Types
+export interface Perspective {
+  id: string
+  claimId: string
+  userId: string
+  title?: string
+  body: string
+  position: 'for' | 'against'
+  sourceUrl?: string
+  sourcePlatform?: string
+  fileUrl?: string
+  fileName?: string
+  fileSize?: number
+  fileType?: string
+  metadata?: Record<string, any>
+  status: 'pending' | 'approved' | 'rejected' | 'flagged'
+  upvotes: number
+  downvotes: number
+  score: number
+  createdAt: Date
+  updatedAt: Date
+  user?: User
+  claim?: Claim
+}
+
 // Flag Types
 export interface Flag {
   id: string
   claimId?: string
   evidenceId?: string
+  perspectiveId?: string
   userId: string
   reason: 'misinformation' | 'spam' | 'harassment' | 'inappropriate' | 'copyright' | 'other'
   description?: string

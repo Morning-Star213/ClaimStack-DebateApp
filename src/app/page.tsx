@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -9,128 +9,18 @@ import Image from 'next/image'
 import { SortAscIcon } from '@/components/ui/Icons'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
-
-// Mock data - replace with real data
-const mockClaims: Claim[] = [
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-]
+import { ProtectedLink } from '@/components/ui/ProtectedLink'
+import { useClaimsStore } from '@/store/claimsStore'
 
 export default function HomePage() {
+  const { claims, isLoading, error, fetchApprovedClaims } = useClaimsStore()
   const [activeButton, setActiveButton] = useState<'sort' | 'recent'>('recent')
   const [filters, setFilters] = useState<FilterValues | null>(null)
+
+  // Fetch approved claims on mount
+  useEffect(() => {
+    fetchApprovedClaims({ refresh: true })
+  }, [fetchApprovedClaims])
 
   const handleFiltersChange = (newFilters: FilterValues) => {
     setFilters(newFilters)
@@ -138,8 +28,18 @@ export default function HomePage() {
     console.log('Filters applied:', newFilters)
   }
 
+  // Limit to 6 claims for the home page
+  const displayedClaims = claims.slice(0, 6)
+
   return (
     <div className="bg-gray-50 relative">
+      <div 
+        className="absolute top-0 left-0 right-0 pointer-events-none"
+        style={{
+          height: 'min(1109px, 100vh)',
+          background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
+        }}
+      />
       {/* Hero Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -151,7 +51,7 @@ export default function HomePage() {
               Join Us... Choose A Side... <br className="hidden sm:block"/>In The Sea Of Online Debates...
             </p>
             <Button variant="primary" size="base" className="border border-blue-300 border-solid rounded-full px-6 sm:px-10" asChild>
-              <Link href="/browse">Browse</Link>
+              <ProtectedLink href="/browse">Browse</ProtectedLink>
             </Button>
           </div>
         </div>
@@ -232,8 +132,26 @@ export default function HomePage() {
               iconSize="w-3 h-3 sm:w-4 sm:h-4"
             />
           </div>
+          {isLoading && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Loading approved claims...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="text-center py-8">
+              <p className="text-red-600">Error: {error}</p>
+            </div>
+          )}
+
+          {!isLoading && !error && displayedClaims.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No approved claims found.</p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {mockClaims.map((claim) => (
+            {displayedClaims.map((claim) => (
               <ContentCard key={claim.id} item={claim} />
             ))}
           </div>

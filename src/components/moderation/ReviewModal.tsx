@@ -226,12 +226,14 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       isOpen={isApproveModalOpen}
       onClose={() => setIsApproveModalOpen(false)}
       onConfirm={handleApproveConfirm}
+      claimId={item.claimId}
     />
 
     <RejectModal
       isOpen={isRejectModalOpen}
       onClose={() => setIsRejectModalOpen(false)}
       onConfirm={handleRejectConfirm}
+      claimId={item.claimId}
     />
 
     <EscalateModal
