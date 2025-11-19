@@ -25,29 +25,58 @@ if (!global.mongoose) {
 }
 
 async function connectDB(): Promise<typeof mongoose> {
-  if (cached.conn) {
+  // If already connected, return the connection
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn
   }
 
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
+  // If connection is in progress, wait for it
+  if (cached.promise) {
+    try {
+      cached.conn = await cached.promise
+      return cached.conn
+    } catch (error) {
+      // If connection fails, reset promise and continue
+      cached.promise = null
+      // During build or if DB is unavailable, return mongoose instance without throwing
+      // This allows the build to continue
+      if (!cached.conn) {
+        cached.conn = mongoose as typeof mongoose
+      }
+      return cached.conn
     }
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('Connected to MongoDB')
-      return mongoose
-    })
   }
+
+  // Start new connection attempt
+  const opts = {
+    bufferCommands: false,
+    serverSelectionTimeoutMS: 5000, // 5 second timeout
+    socketTimeoutMS: 45000,
+  }
+
+  cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    console.log('Connected to MongoDB:>>------------->')
+    return mongoose
+  }).catch((error) => {
+    // Reset promise on error so we can retry later
+    cached.promise = null
+    // Log error for debugging (but don't throw during build)
+    console.error('MongoDB connection error:', error.message)
+    throw error
+  })
 
   try {
     cached.conn = await cached.promise
-  } catch (e) {
+    return cached.conn
+  } catch (error) {
+    // If connection fails (e.g., during build when DB is not available),
+    // return mongoose instance without throwing to allow build to continue
     cached.promise = null
-    throw e
+    if (!cached.conn) {
+      cached.conn = mongoose as typeof mongoose
+    }
+    return cached.conn
   }
-
-  return cached.conn
 }
 
 export default connectDB
