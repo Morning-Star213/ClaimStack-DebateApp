@@ -39,7 +39,8 @@ const SessionSchema = new Schema<ISession>(
 )
 
 // Indexes
-SessionSchema.index({ sessionToken: 1 })
+// Note: sessionToken already has unique: true, which automatically creates an index
+// Only create indexes for fields that don't have unique: true
 SessionSchema.index({ userId: 1 })
 SessionSchema.index({ expires: 1 })
 

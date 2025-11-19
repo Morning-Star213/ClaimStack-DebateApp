@@ -26,32 +26,44 @@ export async function createSession(userId: string, userData: JWTPayload): Promi
 }
 
 export async function getSession(sessionToken: string): Promise<JWTPayload | null> {
-  // Ensure database connection
-  await connectDB()
+  try {
+    // Ensure database connection
+    await connectDB()
 
-  // Verify token
-  const payload = verifyToken(sessionToken)
-  if (!payload) {
+    // Verify token
+    const payload = verifyToken(sessionToken)
+    if (!payload) {
+      return null
+    }
+
+    // Check if session exists in database
+    const session = await Session.findOne({ sessionToken }).populate('userId')
+
+    if (!session || session.expires < new Date()) {
+      return null
+    }
+
+    const user = await User.findById(session.userId)
+    if (!user) {
+      return null
+    }
+
+    return {
+      userId: user._id.toString(),
+      email: user.email,
+      username: user.username,
+      role: user.role,
+    }
+  } catch (error) {
+    // If database is unavailable (e.g., during build), return null
+    // This allows the build to continue without failing
+    // In runtime, log the error but don't throw
+    if (error instanceof Error && error.message.includes('ETIMEDOUT')) {
+      // Connection timeout - likely during build or DB unavailable
+      return null
+    }
+    console.error('Session error:', error)
     return null
-  }
-
-  // Check if session exists in database
-  const session = await Session.findOne({ sessionToken }).populate('userId')
-
-  if (!session || session.expires < new Date()) {
-    return null
-  }
-
-  const user = await User.findById(session.userId)
-  if (!user) {
-    return null
-  }
-
-  return {
-    userId: user._id.toString(),
-    email: user.email,
-    username: user.username,
-    role: user.role,
   }
 }
 

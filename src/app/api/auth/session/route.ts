@@ -45,7 +45,12 @@ export async function GET(request: NextRequest) {
       isAuthenticated: true,
     })
   } catch (error) {
-    console.error('Session error:', error)
+    // If database connection fails (e.g., during build), return unauthenticated state
+    // This allows the build to continue without failing
+    // Only log non-timeout errors for debugging
+    if (error instanceof Error && !error.message.includes('ETIMEDOUT')) {
+      console.error('Session error:', error)
+    }
     return NextResponse.json(
       { user: null, isAuthenticated: false },
       { status: 200 }
