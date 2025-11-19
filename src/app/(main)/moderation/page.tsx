@@ -129,7 +129,7 @@ export default function ModerationPage() {
         votesFor: 0, // TODO: Fetch votes if available
         votesAgainst: 0, // TODO: Fetch votes if available
         flagTimestamps: [], // TODO: Fetch flag timestamps
-        imageUrl: undefined, // TODO: Add image if available
+        imageUrl: claim.fileUrl || undefined,
       }
     })
 

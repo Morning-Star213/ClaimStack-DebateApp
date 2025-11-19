@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { FlagIcon, QuestionMarkIcon, LinkIcon } from '@/components/ui/Icons'
@@ -50,6 +50,12 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
   const [isEscalateModalOpen, setIsEscalateModalOpen] = useState(false)
+  const [imageError, setImageError] = useState(false)
+
+  // Reset image error when item changes
+  useEffect(() => {
+    setImageError(false)
+  }, [item?.id])
 
   if (!item) return null
 
@@ -117,12 +123,23 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               </div>
             </div>
             
-            {/* Image Placeholder */}
-            <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mt-4">
-              <svg className="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
+            {/* Image Display */}
+            {item.imageUrl && !imageError ? (
+              <div className="w-full h-64 bg-gray-200 rounded-lg overflow-hidden mt-4">
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mt-4">
+                <svg className="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            )}
             
             {item.link && (
               <div className="text-gray-600 flex items-center space-x-2 text-sm pt-2">
