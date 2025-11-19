@@ -8,15 +8,18 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { MenuIcon } from '@/components/ui/Icons'
 import { Modal } from '@/components/ui/Modal'
 import { SubmitClaimForm } from '@/components/claims/SubmitClaimForm'
+import { useAuth } from '@/hooks/useAuth'
 
 export const Header: React.FC = () => {
   const pathname = usePathname()
   const router = useRouter()
+  const { user } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false)
   
   const isBrowseActive = pathname?.startsWith('/browse')
   const isModerationActive = pathname?.startsWith('/moderation')
+  const avatarUrl = user?.avatarUrl || '/icons/user.png'
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -73,7 +76,7 @@ export const Header: React.FC = () => {
             <Link href="/profile" className="flex items-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-blue-500 flex items-center justify-center overflow-hidden">
                 <img
-                  src="/icons/user.png"
+                  src={avatarUrl}
                   alt="User avatar"
                   className="w-full h-full object-cover"
                 />

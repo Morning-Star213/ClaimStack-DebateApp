@@ -32,9 +32,11 @@ export async function GET(request: NextRequest) {
     // Get query parameters
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
+    const userId = searchParams.get('userId')
     
     // Allow public access to approved claims, require auth for others
-    if (status !== 'approved') {
+    // Also require auth when filtering by userId (user's own claims)
+    if (status !== 'approved' || userId) {
       const authResult = await requireAuth(request)
       if (authResult.error) {
         return authResult.error
@@ -52,6 +54,27 @@ export async function GET(request: NextRequest) {
     
     if (status) {
       query.status = status.toUpperCase()
+    }
+    
+    if (userId) {
+      // Validate userId format
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        query.userId = new mongoose.Types.ObjectId(userId)
+      } else {
+        return NextResponse.json(
+          { 
+            success: false,
+            error: 'Invalid userId format',
+            claims: [],
+            total: 0,
+            hasMore: false,
+          },
+          { 
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        )
+      }
     }
     
     if (category) {
