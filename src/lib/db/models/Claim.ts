@@ -17,6 +17,11 @@ export interface IClaim extends Document {
   againstSummary?: string
   summaryUpdatedAt?: Date
   viewCount: number
+  url?: string
+  fileUrl?: string
+  fileName?: string
+  fileSize?: number
+  fileType?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -57,6 +62,21 @@ const ClaimSchema = new Schema<IClaim>(
     viewCount: {
       type: Number,
       default: 0,
+    },
+    url: {
+      type: String,
+    },
+    fileUrl: {
+      type: String,
+    },
+    fileName: {
+      type: String,
+    },
+    fileSize: {
+      type: Number,
+    },
+    fileType: {
+      type: String,
     },
   },
   {

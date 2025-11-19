@@ -23,6 +23,11 @@ export interface Claim {
   againstSummary?: string
   summaryUpdatedAt?: Date
   viewCount: number
+  url?: string
+  fileUrl?: string
+  fileName?: string
+  fileSize?: number
+  fileType?: string
   createdAt: Date
   updatedAt: Date
   user?: User

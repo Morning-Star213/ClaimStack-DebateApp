@@ -74,6 +74,11 @@ CREATE TABLE claims (
     against_summary TEXT, -- AI-generated "steel man" summary for "Against" side
     summary_updated_at TIMESTAMP WITH TIME ZONE,
     view_count INTEGER DEFAULT 0,
+    url TEXT, -- For external links
+    file_url TEXT, -- For uploaded files (S3/Supabase URL)
+    file_name VARCHAR(255),
+    file_size BIGINT,
+    file_type VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

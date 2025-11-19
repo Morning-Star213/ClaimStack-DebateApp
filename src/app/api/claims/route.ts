@@ -17,6 +17,11 @@ const createClaimSchema = z.object({
   evidenceUrl: z.string().optional(),
   evidenceDescription: z.string().max(500).optional(),
   position: z.enum(['for', 'against']).optional(),
+  url: z.string().optional(),
+  fileUrl: z.string().optional(),
+  fileName: z.string().optional(),
+  fileSize: z.number().optional(),
+  fileType: z.string().optional(),
 })
 
 export async function GET(request: NextRequest) {
@@ -105,6 +110,11 @@ export async function GET(request: NextRequest) {
         categoryId: categoryIdString,
         status: claim.status.toLowerCase() as 'pending' | 'approved' | 'rejected' | 'flagged',
         viewCount: claim.viewCount,
+        url: claim.url,
+        fileUrl: claim.fileUrl,
+        fileName: claim.fileName,
+        fileSize: claim.fileSize,
+        fileType: claim.fileType,
         createdAt: claim.createdAt,
         updatedAt: claim.updatedAt,
         user: claim.userId && !(claim.userId instanceof mongoose.Types.ObjectId) ? {
@@ -206,7 +216,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { title, description, category, evidenceType, evidenceUrl, evidenceDescription, position } = validationResult.data
+    const { title, description, category, evidenceType, evidenceUrl, evidenceDescription, position, url, fileUrl, fileName, fileSize, fileType } = validationResult.data
 
     // Find or create category if provided
     let categoryId: mongoose.Types.ObjectId | undefined
@@ -225,6 +235,11 @@ export async function POST(request: NextRequest) {
       categoryId,
       status: ClaimStatus.PENDING,
       viewCount: 0,
+      url,
+      fileUrl,
+      fileName,
+      fileSize,
+      fileType,
     })
 
     // Handle initial evidence if provided
@@ -337,6 +352,11 @@ export async function POST(request: NextRequest) {
         categoryId: categoryIdString,
         status: populatedClaim.status.toLowerCase() as 'pending' | 'approved' | 'rejected' | 'flagged',
         viewCount: populatedClaim.viewCount,
+        url: populatedClaim.url,
+        fileUrl: populatedClaim.fileUrl,
+        fileName: populatedClaim.fileName,
+        fileSize: populatedClaim.fileSize,
+        fileType: populatedClaim.fileType,
         createdAt: populatedClaim.createdAt,
         updatedAt: populatedClaim.updatedAt,
         user: populatedClaim.userId instanceof mongoose.Types.ObjectId ? undefined : {
