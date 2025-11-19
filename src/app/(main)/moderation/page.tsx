@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/Card'
-import { Button } from '@/components/ui/Button'
-import { Modal } from '@/components/ui/Modal'
 import { SearchIcon, ClockIcon, FlagIcon, QuestionMarkIcon, LinkIcon } from '@/components/ui/Icons'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
 import { ReviewModal } from '@/components/moderation/ReviewModal'
+import { Claim } from '@/lib/types'
 
 const sortOptions = [
   { id: 'recent', label: 'Most Recent' },
@@ -34,40 +33,126 @@ interface ModerationItem {
   votesFor?: number
   votesAgainst?: number
   flagTimestamps?: Array<{ date: string; user: string }>
-  imageUrl?: string
+  // File information
+  fileUrl?: string
+  fileName?: string
+  fileSize?: number
+  fileType?: string
+  // External link information
+  url?: string
 }
 
-const mockItems: ModerationItem[] = Array(9).fill({
-  id: '1',
-  type: 'claim' as const,
-  user: '@JohnDoe',
-  date: '14 Jun 2025',
-  title: 'COVID Vaccines Lead To Infertility, According To This Study',
-  flaggedBy: 5,
-  reason: 'Misinformation',
-  link: 'https://example.com/article-about-claim',
-  status: 'pending' as const,
-  claimId: '8827-xyq',
-  submittedDate: '15 June 2025, 14:03 UTC',
-  ipAddress: '45.67.23.89 (UK)',
-  platform: 'Web',
-  userStrikeHistory: '1 prior rejection',
-  votesFor: 12,
-  votesAgainst: 3,
-  flagTimestamps: [
-    { date: '15 Jun, 14:15', user: 'user1' },
-    { date: '16 Jun, 10:05', user: 'user2' },
-  ],
-}).map((item, index) => ({ ...item, id: String(index + 1) }))
-
 export default function ModerationPage() {
+  const [pendingClaims, setPendingClaims] = useState<Claim[]>([])
+  const [rejectedClaims, setRejectedClaims] = useState<Claim[]>([])
+  const [isLoadingPending, setIsLoadingPending] = useState(false)
+  const [isLoadingRejected, setIsLoadingRejected] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('recent')
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<FilterValues | null>(null)
   const [selectedItem, setSelectedItem] = useState<ModerationItem | null>(null)
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
-  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+
+  // Fetch pending and rejected claims on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoadingPending(true)
+      setIsLoadingRejected(true)
+      try {
+        // Fetch pending claims
+        const pendingParams = new URLSearchParams()
+        pendingParams.append('status', 'pending')
+        pendingParams.append('page', '1')
+        pendingParams.append('limit', '100')
+        pendingParams.append('sortBy', 'newest')
+        const pendingResponse = await fetch(`/api/claims?${pendingParams.toString()}`)
+        const pendingData = await pendingResponse.json()
+        if (pendingResponse.ok) {
+          setPendingClaims(pendingData.claims || [])
+        }
+
+        // Fetch rejected claims
+        const rejectedParams = new URLSearchParams()
+        rejectedParams.append('status', 'rejected')
+        rejectedParams.append('page', '1')
+        rejectedParams.append('limit', '100')
+        rejectedParams.append('sortBy', 'newest')
+        const rejectedResponse = await fetch(`/api/claims?${rejectedParams.toString()}`)
+        const rejectedData = await rejectedResponse.json()
+        if (rejectedResponse.ok) {
+          setRejectedClaims(rejectedData.claims || [])
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch claims'
+        setError(errorMessage)
+        console.error('Error fetching claims:', err)
+      } finally {
+        setIsLoadingPending(false)
+        setIsLoadingRejected(false)
+      }
+    }
+    fetchData()
+  }, [])
+
+  // Combine all claims
+  const allClaims = [...pendingClaims, ...rejectedClaims]
+
+  // Transform claims to moderation items
+  const moderationItems: ModerationItem[] = allClaims.map((claim) => {
+      const date = new Date(claim.createdAt)
+      const formattedDate = date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      })
+
+      const username = claim.user?.username || 'Unknown'
+      const userDisplay = `@${username}`
+
+      return {
+        id: claim.id,
+        type: 'claim' as const,
+        user: userDisplay,
+        date: formattedDate,
+        title: claim.title,
+        flaggedBy: 0, // TODO: Fetch flag count from API
+        reason: claim.status === 'pending' ? 'Pending Review' : 'Rejected', // TODO: Fetch flag reasons from API
+        link: undefined, // TODO: Add link if available
+        status: claim.status === 'pending' ? 'pending' as const : 'reviewed' as const,
+        claimId: claim.id,
+        submittedDate: date.toLocaleString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZoneName: 'short',
+        }),
+        ipAddress: undefined, // TODO: Add IP address if available
+        platform: 'Web', // TODO: Add platform if available
+        userStrikeHistory: undefined, // TODO: Fetch user strike history
+        votesFor: 0, // TODO: Fetch votes if available
+        votesAgainst: 0, // TODO: Fetch votes if available
+        flagTimestamps: [], // TODO: Fetch flag timestamps
+        fileUrl: claim.fileUrl || undefined,
+        fileName: claim.fileName || undefined,
+        fileSize: claim.fileSize || undefined,
+        fileType: claim.fileType || undefined,
+        url: claim.url || undefined,
+      }
+    })
+
+  // Filter items based on search query
+  const filteredItems = moderationItems.filter((item) => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    return (
+      item.title.toLowerCase().includes(query) ||
+      item.user.toLowerCase().includes(query) ||
+      item.reason.toLowerCase().includes(query)
+    )
+  })
 
   const handleFiltersChange = (newFilters: FilterValues) => {
     setFilters(newFilters)
@@ -78,6 +163,64 @@ export default function ModerationPage() {
   const handleReview = (item: ModerationItem) => {
     setSelectedItem(item)
     setIsReviewModalOpen(true)
+  }
+
+  const handleApprove = async () => {
+    // This is called when approve is confirmed in ReviewModal's ApproveModal
+    // The ReviewModal's child ApproveModal will handle the API call
+    // We just need to refresh the list and close modals
+    setIsReviewModalOpen(false)
+    setSelectedItem(null)
+    // Refresh the list
+    setIsLoadingPending(true)
+    try {
+      const pendingParams = new URLSearchParams()
+      pendingParams.append('status', 'pending')
+      pendingParams.append('page', '1')
+      pendingParams.append('limit', '100')
+      pendingParams.append('sortBy', 'newest')
+      const pendingResponse = await fetch(`/api/claims?${pendingParams.toString()}`)
+      const pendingData = await pendingResponse.json()
+      if (pendingResponse.ok) {
+        setPendingClaims(pendingData.claims || [])
+      }
+    } catch (err) {
+      console.error('Error refreshing claims:', err)
+    } finally {
+      setIsLoadingPending(false)
+    }
+  }
+
+  const handleReject = async () => {
+    // This is called when reject is confirmed in ReviewModal's RejectModal
+    // The ReviewModal's child RejectModal will handle the API call
+    // We just need to refresh the list and close modals
+    setIsReviewModalOpen(false)
+    setSelectedItem(null)
+    // Refresh both lists
+    setIsLoadingPending(true)
+    setIsLoadingRejected(true)
+    try {
+      const [pendingResponse, rejectedResponse] = await Promise.all([
+        fetch(`/api/claims?${new URLSearchParams({ status: 'pending', page: '1', limit: '100', sortBy: 'newest' }).toString()}`),
+        fetch(`/api/claims?${new URLSearchParams({ status: 'rejected', page: '1', limit: '100', sortBy: 'newest' }).toString()}`)
+      ])
+      const [pendingData, rejectedData] = await Promise.all([
+        pendingResponse.json(),
+        rejectedResponse.json()
+      ])
+      if (pendingResponse.ok) {
+        setPendingClaims(pendingData.claims || [])
+      }
+      if (rejectedResponse.ok) {
+        setRejectedClaims(rejectedData.claims || [])
+      }
+    } catch (err) {
+      console.error('Error refreshing claims:', err)
+    } finally {
+      setIsLoadingPending(false)
+      setIsLoadingRejected(false)
+    }
   }
 
   return (
@@ -126,8 +269,26 @@ export default function ModerationPage() {
           </div>
         </div>
 
+        {(isLoadingPending || isLoadingRejected) && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">Loading claims...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="text-center py-8">
+            <p className="text-red-600">Error: {error}</p>
+          </div>
+        )}
+
+        {!isLoadingPending && !isLoadingRejected && !error && filteredItems.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No pending or rejected claims to review.</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {mockItems.map((item) => (
+          {filteredItems.map((item) => (
             <Card key={item.id} className="p-4 sm:p-6 rounded-lg sm:rounded-[32px]">
               <div className="border-b border-gray-200 mb-3 sm:mb-4">
                 <div className="flex items-start justify-between mb-3 sm:mb-4">
@@ -135,9 +296,15 @@ export default function ModerationPage() {
                     Claim
                   </span>
                   {item.status === 'pending' && (
-                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-gray-200 text-black text-xs font-medium rounded-full flex items-center space-x-1">
+                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-yellow-200 text-yellow-800 text-xs font-medium rounded-full flex items-center space-x-1">
                       <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                       <span>Pending</span>
+                    </span>
+                  )}
+                  {item.status === 'reviewed' && (
+                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-red-200 text-red-800 text-xs font-medium rounded-full flex items-center space-x-1">
+                      <FlagIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span>Rejected</span>
                     </span>
                   )}
                 </div>
@@ -187,18 +354,13 @@ export default function ModerationPage() {
           setSelectedItem(null)
         }}
         item={selectedItem}
-        onApprove={() => {
-          setIsReviewModalOpen(false)
-          setIsApproveModalOpen(true)
-        }}
-        onReject={() => {
-          setIsReviewModalOpen(false)
-          setIsRejectModalOpen(true)
-        }}
+        onApprove={handleApprove}
+        onReject={handleReject}
         onEscalate={() => {
           console.log('Escalate to legal')
         }}
       />
+
     </div>
   )
 }

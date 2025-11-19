@@ -1,15 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { GoogleIcon } from '@/components/ui/Icons'
+import { useAuthStore } from '@/store/authStore'
+import { useUIStore } from '@/store/uiStore'
 
 export default function SignupPage() {
   const router = useRouter()
+  const { signup, isAuthenticated, isLoading, clearError } = useAuthStore()
+  const { addToast } = useUIStore()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,10 +23,17 @@ export default function SignupPage() {
     agreeToTerms: false,
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading] = useState(false)
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/browse')
+    }
+  }, [isAuthenticated, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    clearError()
     const newErrors: Record<string, string> = {}
 
     if (!formData.firstName) newErrors.firstName = 'The field cannot be empty.'
@@ -30,6 +41,7 @@ export default function SignupPage() {
     if (!formData.username) newErrors.username = 'The field cannot be empty.'
     if (!formData.email) newErrors.email = 'The field cannot be empty.'
     if (!formData.password) newErrors.password = 'The field cannot be empty.'
+    if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters.'
     if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms.'
 
     if (Object.keys(newErrors).length > 0) {
@@ -37,12 +49,21 @@ export default function SignupPage() {
       return
     }
 
-    setIsLoading(true)
-    // TODO: Implement actual signup logic
-    setTimeout(() => {
-      setIsLoading(false)
+    const result = await signup({
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+    })
+
+    if (result.success) {
+      addToast('Account created successfully!', 'success')
       router.push('/browse')
-    }, 1000)
+    } else {
+      setErrors({ general: result.error || 'Signup failed' })
+      addToast(result.error || 'Signup failed', 'error')
+    }
   }
 
   return (
@@ -184,11 +205,16 @@ export default function SignupPage() {
                 </label>
               </div>
             </div>
-            {/* {errors.agreeToTerms && (
+            {errors.agreeToTerms && (
               <div className="flex justify-center">
-                <p className="w-[324px] text-sm text-red-600">{errors.agreeToTerms}</p>
+                <p className="w-full text-sm text-red-600">{errors.agreeToTerms}</p>
               </div>
-            )} */}
+            )}
+            {errors.general && (
+              <div className="text-center text-sm text-red-600">
+                {errors.general}
+              </div>
+            )}
 
             <div className="flex justify-center items-center pt-8 sm:pt-12 lg:pt-14">
               <Button type="submit" variant="primary" className="w-full rounded-full bg-[#030303] hover:bg-gray-800 text-white text-sm sm:text-base" isLoading={isLoading}>

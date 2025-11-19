@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { VoteButtons } from '@/components/voting/VoteButtons'
 import { ShareIcon, UserIcon } from '@/components/ui/Icons'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
+import { ProtectedLink } from '@/components/ui/ProtectedLink'
 
 interface ContentCardProps {
   item: Claim | Evidence
@@ -30,6 +32,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   isFollowing = false,
   href,
 }) => {
+  const { requireAuth } = useRequireAuth()
   const isEvidenceItem = isEvidence(item)
   const title = item.title || ''
   const description = item.description
@@ -44,6 +47,18 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   const upvotes = isEvidenceItem ? item.upvotes : 0
   const downvotes = isEvidenceItem ? item.downvotes : 0
 
+  const handleFollow = () => {
+    requireAuth(() => {
+      onFollow?.(itemId)
+    })
+  }
+
+  const handleVote = (voteType: 'upvote' | 'downvote') => {
+    requireAuth(() => {
+      onVote?.(itemId, voteType)
+    })
+  }
+
   return (
     <Card className="p-4 sm:p-6 rounded-2xl sm:rounded-[32px]">
       <div className="flex items-start justify-between mb-2 sm:mb-3">
@@ -57,11 +72,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {title && (
         titleHref ? (
-          <Link href={titleHref}>
-            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 hover:text-blue-700 mb-2 leading-tight">
+          <ProtectedLink href={titleHref}>
+            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 hover:text-blue-700 mb-2 leading-tight cursor-pointer">
               {title}
             </h3>
-          </Link>
+          </ProtectedLink>
         ) : (
           <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 hover:text-blue-700 mb-2 leading-tight">
             {title}
@@ -88,7 +103,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => onFollow?.(itemId)}
+            onClick={handleFollow}
             className="bg-black text-white hover:bg-gray-800 rounded-full text-xs sm:text-sm px-3 sm:px-4 flex-shrink-0"
           >
             {isFollowing ? 'Following' : 'Follow'}
@@ -98,7 +113,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             upvotes={upvotes}
             downvotes={downvotes}
             userVote={userVote}
-            onVote={(voteType) => onVote?.(itemId, voteType)}
+            onVote={handleVote}
           />
         </div>
       </div>

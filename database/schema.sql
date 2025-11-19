@@ -40,7 +40,7 @@ CREATE TABLE accounts (
 CREATE TABLE sessions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    session_token VARCHAR(255) UNIQUE NOT NULL,
+    session_token TEXT UNIQUE NOT NULL,
     expires TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -74,6 +74,11 @@ CREATE TABLE claims (
     against_summary TEXT, -- AI-generated "steel man" summary for "Against" side
     summary_updated_at TIMESTAMP WITH TIME ZONE,
     view_count INTEGER DEFAULT 0,
+    url TEXT, -- Forexternal links might include TikTok and Instagram video URL or article URL or and so on.
+    file_url TEXT, -- For uploaded files (S3/Supabase URL)
+    file_name VARCHAR(255),
+    file_size BIGINT,
+    file_type VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

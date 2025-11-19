@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -9,134 +9,43 @@ import Image from 'next/image'
 import { SortAscIcon } from '@/components/ui/Icons'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
-
-// Mock data - replace with real data
-const mockClaims: Claim[] = [
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-  {
-    id: '1',
-    userId: '1',
-    title: 'Study: Effects of Caffeine on Memory (Nature, 2022)',
-    description: 'This randomized trial with 300 participants showed a 12% increase in recall tasks among caffeine users.',
-    status: 'approved',
-    viewCount: 1234,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    user: {
-      id: '1',
-      email: 'test@example.com',
-      username: 'evidenceHunter',
-      firstName: 'Dr. Emily',
-      lastName: 'Watson',
-      role: 'user',
-      createdAt: new Date(),
-    },
-  },
-]
+import { ProtectedLink } from '@/components/ui/ProtectedLink'
+import { useClaimsStore } from '@/store/claimsStore'
+import { useAuth } from '@/hooks/useAuth'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
+  const { claims, isLoading, error, fetchApprovedClaims } = useClaimsStore()
+  const { isAuthenticated } = useAuth()
+  const { requireAuth } = useRequireAuth()
+  const router = useRouter()
   const [activeButton, setActiveButton] = useState<'sort' | 'recent'>('recent')
   const [filters, setFilters] = useState<FilterValues | null>(null)
+
+  // Fetch approved claims on mount
+  useEffect(() => {
+    fetchApprovedClaims({ refresh: true })
+  }, [fetchApprovedClaims])
 
   const handleFiltersChange = (newFilters: FilterValues) => {
     setFilters(newFilters)
     // Apply filters to your data here
     console.log('Filters applied:', newFilters)
   }
+
+  const handleShowMore = () => {
+    if (isAuthenticated) {
+      // Navigate to browse page when logged in
+      router.push('/browse')
+    } else {
+      // Show login modal when not logged in
+      requireAuth()
+    }
+  }
+
+  // Limit to 6 claims for the home page (always, regardless of login status)
+  const displayedClaims = claims.slice(0, 6)
 
   return (
     <div className="bg-gray-50 relative">
@@ -158,7 +67,7 @@ export default function HomePage() {
               Join Us... Choose A Side... <br className="hidden sm:block"/>In The Sea Of Online Debates...
             </p>
             <Button variant="primary" size="base" className="border border-blue-300 border-solid rounded-full px-6 sm:px-10" asChild>
-              <Link href="/browse">Browse</Link>
+              <ProtectedLink href="/browse">Browse</ProtectedLink>
             </Button>
           </div>
         </div>
@@ -239,13 +148,37 @@ export default function HomePage() {
               iconSize="w-3 h-3 sm:w-4 sm:h-4"
             />
           </div>
+          {isLoading && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Loading approved claims...</p>
+            </div>
+          )}
+
+          {error && error !== 'Unauthorized' && (
+            <div className="text-center py-8">
+              <p className="text-red-600">Error: {error}</p>
+            </div>
+          )}
+
+          {!isLoading && (!error || error === 'Unauthorized') && displayedClaims.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No approved claims found.</p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {mockClaims.map((claim) => (
+            {displayedClaims.map((claim) => (
               <ContentCard key={claim.id} item={claim} />
             ))}
           </div>
           <div className="text-center mt-6 sm:mt-8">
-            <Button variant="outline" className="px-6 sm:px-8">Show More</Button>
+            <Button 
+              variant="outline" 
+              className="px-6 sm:px-8"
+              onClick={handleShowMore}
+            >
+              Show More
+            </Button>
           </div>
         </div>
       </section>

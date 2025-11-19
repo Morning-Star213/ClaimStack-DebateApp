@@ -1,21 +1,49 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { CheckmarkIcon } from '@/components/ui/Icons'
+import { useClaimsStore } from '@/store/claimsStore'
 
 interface ApproveModalProps {
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
+  claimId?: string
 }
 
 export const ApproveModal: React.FC<ApproveModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  claimId,
 }) => {
+  const { approveClaim } = useClaimsStore()
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleConfirm = async () => {
+    if (!claimId) {
+      onConfirm()
+      return
+    }
+
+    setIsProcessing(true)
+    try {
+      const result = await approveClaim(claimId)
+      if (result.success) {
+        onConfirm()
+      } else {
+        console.error('Failed to approve claim:', result.error)
+        // You might want to show an error message to the user here
+      }
+    } catch (error) {
+      console.error('Error approving claim:', error)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -56,10 +84,20 @@ export const ApproveModal: React.FC<ApproveModalProps> = ({
           </li>
         </ul>
         <div className="flex flex-col justify-end space-y-3 pt-4">
-          <Button variant="primary" onClick={onConfirm} className='rounded-full'>
-            Approve and Publish
+          <Button 
+            variant="primary" 
+            onClick={handleConfirm} 
+            className='rounded-full'
+            disabled={isProcessing}
+          >
+            {isProcessing ? 'Processing...' : 'Approve and Publish'}
           </Button>
-          <Button variant="outline" onClick={onClose} className='rounded-full'>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className='rounded-full'
+            disabled={isProcessing}
+          >
             Cancel
           </Button>
         </div>

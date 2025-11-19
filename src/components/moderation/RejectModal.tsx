@@ -4,25 +4,49 @@ import React, { useState } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { CheckmarkIcon } from '@/components/ui/Icons'
+import { useClaimsStore } from '@/store/claimsStore'
 
 interface RejectModalProps {
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
+  claimId?: string
 }
 
 export const RejectModal: React.FC<RejectModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  claimId,
 }) => {
+  const { rejectClaim } = useClaimsStore()
   const [reason, setReason] = useState('Evidence Is Misleading And Sourced From A Discredited Article.')
   const [customMessage, setCustomMessage] = useState('This Evidence Does Not Meet Our Source Credibility Standards.')
   const [addToLog, setAddToLog] = useState(true)
   const [notifyUser, setNotifyUser] = useState(true)
+  const [isProcessing, setIsProcessing] = useState(false)
 
-  const handleConfirm = () => {
-    onConfirm()
+  const handleConfirm = async () => {
+    if (!claimId) {
+      onConfirm()
+      return
+    }
+
+    setIsProcessing(true)
+    try {
+      const rejectReason = reason || customMessage
+      const result = await rejectClaim(claimId, rejectReason)
+      if (result.success) {
+        onConfirm()
+      } else {
+        console.error('Failed to reject claim:', result.error)
+        // You might want to show an error message to the user here
+      }
+    } catch (error) {
+      console.error('Error rejecting claim:', error)
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -111,10 +135,20 @@ export const RejectModal: React.FC<RejectModalProps> = ({
         </div>
 
         <div className="flex flex-col justify-end space-y-3 pt-4">
-          <Button variant="danger" onClick={handleConfirm} className='rounded-full'>
-            Reject and Remove
+          <Button 
+            variant="danger" 
+            onClick={handleConfirm} 
+            className='rounded-full'
+            disabled={isProcessing || !reason.trim()}
+          >
+            {isProcessing ? 'Processing...' : 'Reject and Remove'}
           </Button>
-          <Button variant="outline" onClick={onClose} className='rounded-full'>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className='rounded-full'
+            disabled={isProcessing}
+          >
             Cancel
           </Button>
         </div>
