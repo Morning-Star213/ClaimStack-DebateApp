@@ -39,13 +39,14 @@ const categories = [
 ]
 
 export const PreLoginHeader: React.FC = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const router = useRouter()
   const [isCategoriesHovered, setIsCategoriesHovered] = useState(false)
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false)
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false)
+  const avatarUrl = user?.avatarUrl || '/icons/user.png'
 
   return (
     <header className="w-full bg-[#eef4ff] z-50">
@@ -128,7 +129,7 @@ export const PreLoginHeader: React.FC = () => {
                 <Link href="/profile" className="flex items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-blue-500 flex items-center justify-center overflow-hidden">
                     <img
-                      src="/icons/user.png"
+                      src={avatarUrl}
                       alt="User avatar"
                       className="w-full h-full object-cover"
                     />
