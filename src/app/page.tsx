@@ -11,9 +11,15 @@ import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
 import { ProtectedLink } from '@/components/ui/ProtectedLink'
 import { useClaimsStore } from '@/store/claimsStore'
+import { useAuth } from '@/hooks/useAuth'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
   const { claims, isLoading, error, fetchApprovedClaims } = useClaimsStore()
+  const { isAuthenticated } = useAuth()
+  const { requireAuth } = useRequireAuth()
+  const router = useRouter()
   const [activeButton, setActiveButton] = useState<'sort' | 'recent'>('recent')
   const [filters, setFilters] = useState<FilterValues | null>(null)
 
@@ -28,7 +34,17 @@ export default function HomePage() {
     console.log('Filters applied:', newFilters)
   }
 
-  // Limit to 6 claims for the home page
+  const handleShowMore = () => {
+    if (isAuthenticated) {
+      // Navigate to browse page when logged in
+      router.push('/browse')
+    } else {
+      // Show login modal when not logged in
+      requireAuth()
+    }
+  }
+
+  // Limit to 6 claims for the home page (always, regardless of login status)
   const displayedClaims = claims.slice(0, 6)
 
   return (
@@ -138,13 +154,13 @@ export default function HomePage() {
             </div>
           )}
 
-          {error && (
+          {error && error !== 'Unauthorized' && (
             <div className="text-center py-8">
               <p className="text-red-600">Error: {error}</p>
             </div>
           )}
 
-          {!isLoading && !error && displayedClaims.length === 0 && (
+          {!isLoading && (!error || error === 'Unauthorized') && displayedClaims.length === 0 && (
             <div className="text-center py-8">
               <p className="text-gray-600">No approved claims found.</p>
             </div>
@@ -156,7 +172,13 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-6 sm:mt-8">
-            <Button variant="outline" className="px-6 sm:px-8">Show More</Button>
+            <Button 
+              variant="outline" 
+              className="px-6 sm:px-8"
+              onClick={handleShowMore}
+            >
+              Show More
+            </Button>
           </div>
         </div>
       </section>

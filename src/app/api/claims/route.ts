@@ -21,18 +21,20 @@ const createClaimSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const authResult = await requireAuth(request)
-    if (authResult.error) {
-      return authResult.error
-    }
-
     // Ensure database connection
     await connectDB()
 
     // Get query parameters
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
+    
+    // Allow public access to approved claims, require auth for others
+    if (status !== 'approved') {
+      const authResult = await requireAuth(request)
+      if (authResult.error) {
+        return authResult.error
+      }
+    }
     const category = searchParams.get('category')
     const search = searchParams.get('search')
     const sortBy = searchParams.get('sortBy') || 'newest'

@@ -6,9 +6,11 @@ import { PreLoginHeader } from './PreLoginHeader'
 import { Footer } from './Footer'
 import { LoginRequiredModal } from '@/components/auth/LoginRequiredModal'
 import { RouteGuard } from '@/components/auth/RouteGuard'
+import { useAuth } from '@/hooks/useAuth'
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const { isAuthenticated } = useAuth()
   const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/signup')
   const isHomePage = pathname === '/'
 
@@ -16,10 +18,14 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     return <>{children}</>
   }
 
+  // On home page, always show PreLoginHeader (it handles auth state internally)
+  // On other pages, always show Header
+  const shouldShowPreLoginHeader = isHomePage
+
   return (
     <RouteGuard>
       <div className="min-h-screen flex flex-col">
-        {isHomePage ? <PreLoginHeader />  : <Header />}
+        {shouldShowPreLoginHeader ? <PreLoginHeader />  : <Header />}
         {isHomePage ?       
         <div 
           className="absolute top-0 left-0 right-0 pointer-events-none"
