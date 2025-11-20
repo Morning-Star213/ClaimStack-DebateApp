@@ -328,7 +328,6 @@ export async function POST(request: NextRequest) {
             }
             evidenceData.title = oembedData.title || undefined
           } catch (error) {
-            console.error('Failed to fetch oEmbed data:', error)
           }
         } else if (evidenceUrl.includes('twitter.com') || evidenceUrl.includes('x.com')) {
           evidenceTypeEnum = EvidenceType.TWEET
