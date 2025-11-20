@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/db/mongoose'
-import { requireAuth } from '@/lib/auth/middleware'
+import { requireAuth, optionalAuth } from '@/lib/auth/middleware'
 import { Claim, Category, ClaimStatus } from '@/lib/db/models'
+import { ClaimVote, VoteType } from '@/lib/db/models'
 import { Evidence, EvidenceType, Position, EvidenceStatus } from '@/lib/db/models'
 import { Flag } from '@/lib/db/models'
 import { uploadFile } from '@/lib/storage/upload'
 import { fetchOEmbed } from '@/lib/oembed/client'
+import { updateClaimScore } from '@/lib/utils/claimScore'
 import mongoose from 'mongoose'
 import { z } from 'zod'
 
@@ -32,9 +34,11 @@ export async function GET(request: NextRequest) {
     // Get query parameters
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
+    const userId = searchParams.get('userId')
     
     // Allow public access to approved claims, require auth for others
-    if (status !== 'approved') {
+    // Also require auth when filtering by userId (user's own claims)
+    if (status !== 'approved' || userId) {
       const authResult = await requireAuth(request)
       if (authResult.error) {
         return authResult.error
@@ -52,6 +56,27 @@ export async function GET(request: NextRequest) {
     
     if (status) {
       query.status = status.toUpperCase()
+    }
+    
+    if (userId) {
+      // Validate userId format
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        query.userId = new mongoose.Types.ObjectId(userId)
+      } else {
+        return NextResponse.json(
+          { 
+            success: false,
+            error: 'Invalid userId format',
+            claims: [],
+            total: 0,
+            hasMore: false,
+          },
+          { 
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        )
+      }
     }
     
     if (category) {
@@ -90,6 +115,25 @@ export async function GET(request: NextRequest) {
     // Get total count
     const total = await Claim.countDocuments(query)
 
+    // Get user vote status if authenticated
+    const user = await optionalAuth(request)
+    let userVotes: Map<string, 'upvote' | 'downvote'> = new Map()
+    
+    if (user) {
+      const userId = new mongoose.Types.ObjectId(user.userId)
+      const claimIds = claims.map((claim: any) => new mongoose.Types.ObjectId(claim._id))
+      
+      // Get all votes
+      const votes = await ClaimVote.find({
+        claimId: { $in: claimIds },
+        userId,
+      })
+      votes.forEach((vote) => {
+        const claimId = vote.claimId.toString()
+        userVotes.set(claimId, vote.voteType === VoteType.UPVOTE ? 'upvote' : 'downvote')
+      })
+    }
+
     // Transform claims to match frontend format
     const transformedClaims = claims.map((claim: any) => {
       const userId = claim.userId instanceof mongoose.Types.ObjectId 
@@ -110,6 +154,11 @@ export async function GET(request: NextRequest) {
         categoryId: categoryIdString,
         status: claim.status.toLowerCase() as 'pending' | 'approved' | 'rejected' | 'flagged',
         viewCount: claim.viewCount,
+        followCount: claim.followCount || 0,
+        totalScore: claim.totalScore || 0,
+        upvotes: claim.upvotes || 0,
+        downvotes: claim.downvotes || 0,
+        userVote: userVotes.get(claim._id.toString()) || null,
         url: claim.url,
         fileUrl: claim.fileUrl,
         fileName: claim.fileName,
@@ -149,7 +198,6 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Fetch claims error:', error)
     const errorMessage = error instanceof Error ? error.message : 'Failed to fetch claims'
     
     return NextResponse.json(
@@ -249,7 +297,7 @@ export async function POST(request: NextRequest) {
         userId: new mongoose.Types.ObjectId(user.userId),
         position: position ? (position.toUpperCase() as Position) : Position.FOR,
         description: evidenceDescription,
-        status: EvidenceStatus.PENDING,
+        status: EvidenceStatus.APPROVED, // Auto-approve evidence
         upvotes: 0,
         downvotes: 0,
         score: 0,
@@ -279,7 +327,6 @@ export async function POST(request: NextRequest) {
             }
             evidenceData.title = oembedData.title || undefined
           } catch (error) {
-            console.error('Failed to fetch oEmbed data:', error)
           }
         } else if (evidenceUrl.includes('twitter.com') || evidenceUrl.includes('x.com')) {
           evidenceTypeEnum = EvidenceType.TWEET
@@ -317,6 +364,14 @@ export async function POST(request: NextRequest) {
       // Create evidence if we have valid data
       if (evidenceData.type) {
         await Evidence.create(evidenceData)
+        
+        // Update claim score since evidence is auto-approved
+        try {
+          await updateClaimScore(claim._id)
+        } catch (error) {
+          console.error('Error updating claim score after evidence creation:', error)
+          // Don't fail the request if score update fails
+        }
       }
     }
 
@@ -383,7 +438,6 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Create claim error:', error)
     const errorMessage = error instanceof Error ? error.message : 'Failed to create claim'
     
     // Always return JSON, even on errors
