@@ -243,13 +243,14 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
       title="Edit Profile"
       size="xl"
     >
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-col gap-6">
         {/* Success Message */}
         {success && (
           <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
             {success}
           </div>
         )}
+        <div className="flex flex-row gap-6 w-full">
 
         {/* Profile Section */}
         <form onSubmit={handleSubmit} className="space-y-4 w-1/2">
@@ -400,6 +401,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
           </form>
         </div>
       </div>
+    </div>
     </Modal>
   )
 }
