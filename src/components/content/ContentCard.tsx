@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Claim, Evidence, Perspective } from '@/lib/types'
 import type { Evidence as EvidenceType, Perspective as PerspectiveType } from '@/lib/types'
@@ -99,6 +99,9 @@ export const ContentCard: React.FC<ContentCardProps> = ({
     currentFollowCount: initialFollowCount,
   })
 
+  // State for description expansion
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+
   // Sync with props if they change (for external control)
   useEffect(() => {
     if (propUserVote !== undefined && propUserVote !== userVote) {
@@ -170,7 +173,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       )}
 
       {description && (
-        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 font-normal leading-relaxed">{description}</p>
+        <div className="mb-3 sm:mb-4">
+          <p className={`text-gray-600 text-xs sm:text-sm font-normal leading-relaxed ${!isDescriptionExpanded ? 'line-clamp-2' : ''}`}>
+            {description}
+          </p>
+          <button
+            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+            className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium mt-1 transition-colors"
+          >
+            {isDescriptionExpanded ? 'read less' : 'read more'}
+          </button>
+        </div>
       )}
 
       {user && (

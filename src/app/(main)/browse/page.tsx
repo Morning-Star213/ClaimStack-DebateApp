@@ -48,7 +48,7 @@ export default function BrowsePage() {
     <div className="bg-gray-50 min-h-screen">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-[46px] font-semibold text-[#030303]">Browse The Claims</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-[46px] font-semibold text-[#030303]">Browse Claims</h1>
           <div className="flex-1 w-full sm:max-w-full sm:ml-4 lg:ml-8">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">

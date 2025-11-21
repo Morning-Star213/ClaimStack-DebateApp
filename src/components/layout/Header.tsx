@@ -49,7 +49,7 @@ export const Header: React.FC = () => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  Browse The Claims
+                  Browse Claims
                 </Link>
                 {isAdmin && (
                   <Link
@@ -140,7 +140,7 @@ export const Header: React.FC = () => {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    Browse The Claims
+                    Browse Claims
                   </Link>
                   {isAdmin && (
                     <Link
