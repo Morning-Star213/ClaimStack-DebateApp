@@ -19,7 +19,14 @@ export const Header: React.FC = () => {
   
   const isBrowseActive = pathname?.startsWith('/browse')
   const isModerationActive = pathname?.startsWith('/moderation')
+  const isUserManagementActive = pathname?.startsWith('/admin/users')
   const avatarUrl = user?.avatarUrl || '/icons/user.png'
+  
+  // Check if user is ADMIN or MODERATOR (can see admin features)
+  const userRole = user?.role?.toUpperCase()
+  const isAdmin = userRole === 'ADMIN'
+  const isModerator = userRole === 'MODERATOR'
+  const canAccessAdminFeatures = isAdmin || isModerator
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -32,28 +39,44 @@ export const Header: React.FC = () => {
             </Link>
 
             {/* Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 lg:pl-5">
-              <Link
-                href="/browse"
-                className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isBrowseActive
-                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Browse The Claims
-              </Link>
-              <Link
-                href="/moderation"
-                className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isModerationActive
-                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Moderation Pannel
-              </Link>
-            </nav>
+            {canAccessAdminFeatures && (
+              <nav className="hidden md:flex items-center space-x-4 lg:space-x-8 lg:pl-5">
+                <Link
+                  href="/browse"
+                  className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    isBrowseActive
+                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Browse The Claims
+                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/moderation"
+                    className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      isModerationActive
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Moderation Pannel
+                  </Link>
+                )}
+                {isAdmin && (
+                  <Link
+                    href="/admin/users"
+                    className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      isUserManagementActive
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    User Management Panel
+                  </Link>
+                )}
+              </nav>
+            )}
           </div>
 
           {/* Right Side Actions */}
@@ -106,28 +129,47 @@ export const Header: React.FC = () => {
               >
                 Submit Claim
               </Button>
-              <Link
-                href="/browse"
-                onClick={() => setIsMenuOpen(false)}
-                className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
-                  isBrowseActive
-                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Browse The Claims
-              </Link>
-              <Link
-                href="/moderation"
-                onClick={() => setIsMenuOpen(false)}
-                className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
-                  isModerationActive
-                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Moderation Pannel
-              </Link>
+              {canAccessAdminFeatures && (
+                <>
+                  <Link
+                    href="/browse"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
+                      isBrowseActive
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Browse The Claims
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/moderation"
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
+                        isModerationActive
+                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      Moderation Pannel
+                    </Link>
+                  )}
+                  {isAdmin && (
+                    <Link
+                      href="/admin/users"
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
+                        isUserManagementActive
+                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      User Management Panel
+                    </Link>
+                  )}
+                </>
+              )}
             </nav>
           </div>
         )}
