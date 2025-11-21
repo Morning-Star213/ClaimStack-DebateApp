@@ -172,6 +172,8 @@ export default function ModerationPage() {
         fileSize: claim.fileSize || undefined,
         fileType: claim.fileType || undefined,
         url: claim.url || undefined,
+        description: claim.description || undefined,
+        forSummary: claim.forSummary || undefined,
       }
     })
 

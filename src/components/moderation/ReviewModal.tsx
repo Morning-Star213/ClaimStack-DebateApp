@@ -35,6 +35,9 @@ export interface ModerationItem {
   fileType?: string
   // External link information
   url?: string
+  // Claim content
+  description?: string
+  forSummary?: string
 }
 
 interface ReviewModalProps {
@@ -111,6 +114,11 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             <h3 className="text-xl font-semibold text-blue-600 leading-tight">
               {item.title}
             </h3>
+            {item.description && (
+              <div className="text-sm text-gray-700 leading-relaxed">
+                {item.description}
+              </div>
+            )}
             
             <div className="space-y-3 pt-2">
               <div className="flex items-center space-x-2 text-sm text-gray-700">
@@ -153,13 +161,12 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             </div>
             
             <div>
-              <span className="text-gray-600">IP Address:</span>
-              <span className="ml-2 font-medium text-[#030303]">{item.ipAddress || 'N/A'}</span>
-            </div>
-            
-            <div>
-              <span className="text-gray-600">Platform:</span>
-              <span className="ml-2 font-medium text-[#030303]">{item.platform || 'N/A'}</span>
+              <span className="text-gray-600 block mb-2">AI Summary:</span>
+              {item.forSummary ? (
+                <p className="text-sm text-[#030303]">{item.forSummary}</p>
+              ) : (
+                <p className="text-sm text-gray-500 italic">No AI summary available</p>
+              )}
             </div>
             
             <div>
