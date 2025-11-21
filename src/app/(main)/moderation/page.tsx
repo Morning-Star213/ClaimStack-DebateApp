@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/Card'
 import { SearchIcon, ClockIcon, FlagIcon, QuestionMarkIcon, LinkIcon } from '@/components/ui/Icons'
 import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
 import { ReviewModal } from '@/components/moderation/ReviewModal'
 import { Claim } from '@/lib/types'
+import { useAuth } from '@/hooks/useAuth'
 
 const sortOptions = [
   { id: 'recent', label: 'Most Recent' },
@@ -43,6 +45,8 @@ interface ModerationItem {
 }
 
 export default function ModerationPage() {
+  const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
   const [pendingClaims, setPendingClaims] = useState<Claim[]>([])
   const [rejectedClaims, setRejectedClaims] = useState<Claim[]>([])
   const [isLoadingPending, setIsLoadingPending] = useState(false)
@@ -53,6 +57,34 @@ export default function ModerationPage() {
   const [filters, setFilters] = useState<FilterValues | null>(null)
   const [selectedItem, setSelectedItem] = useState<ModerationItem | null>(null)
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+
+  // Check if user is ADMIN, redirect if not
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.replace('/')
+        return
+      }
+      // Check role - handle both uppercase (from DB) and lowercase (from types) formats
+      const userRole = user.role?.toUpperCase()
+      if (userRole !== 'ADMIN') {
+        router.replace('/')
+      }
+    }
+  }, [user, authLoading, router])
+
+  // Don't render if still loading or user is not admin
+  if (authLoading) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!user || user.role?.toUpperCase() !== 'ADMIN') {
+    return null
+  }
 
   // Fetch pending and rejected claims on mount
   useEffect(() => {

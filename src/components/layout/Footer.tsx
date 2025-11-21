@@ -27,9 +27,9 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/legal" className="hover:text-white transition-colors">
+                  {/* <Link href="/legal" className="hover:text-white transition-colors"> */}
                     Legal
-                  </Link>
+                  {/* </Link> */}
                 </li>
               </ul>
             </div>
@@ -37,14 +37,14 @@ export const Footer: React.FC = () => {
               <h4 className="text-white font-medium mb-2 text-sm sm:text-base">Explore</h4>
               <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                 <li>
-                  <Link href="/browse" className="hover:text-white transition-colors">
+                  {/* <Link href="/browse" className="hover:text-white transition-colors"> */}
                     Category
-                  </Link>
+                  {/* </Link> */}
                 </li>
                 <li>
-                  <Link href="/browse?sort=trending" className="hover:text-white transition-colors">
+                  {/* <Link href="/browse?sort=trending" className="hover:text-white transition-colors"> */}
                     Trending
-                  </Link>
+                  {/* </Link> */}
                 </li>
               </ul>
             </div>
