@@ -5,6 +5,8 @@ import { hashPassword } from '@/lib/auth/password'
 import { createSession, deleteSession } from '@/lib/auth/session'
 import { cookies } from 'next/headers'
 import { z } from 'zod'
+import { sendEmail } from '@/lib/email/service'
+import { generateWelcomeEmail } from '@/lib/email/templates'
 
 const signupSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -96,6 +98,24 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to set session cookie. Please try again.' },
         { status: 500 }
       )
+    }
+
+    // Send welcome email (non-blocking - don't fail signup if email fails)
+    try {
+      const emailContent = generateWelcomeEmail({
+        firstName: user.firstName,
+        username: user.username,
+        email: user.email,
+      })
+      await sendEmail({
+        to: user.email,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        text: emailContent.text,
+      })
+    } catch (emailError) {
+      // Log error but don't fail the signup process
+      console.error('Failed to send welcome email:', emailError)
     }
 
     return NextResponse.json(

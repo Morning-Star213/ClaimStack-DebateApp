@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 // Routes that are publicly accessible without authentication
 const publicRoutes = ['/']
 // Auth routes that are accessible without authentication (for login/signup)
-const authRoutes = ['/login', '/signup']
+const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password']
 
 export function RouteGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

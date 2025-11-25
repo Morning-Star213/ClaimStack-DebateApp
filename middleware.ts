@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 const publicRoutes = ['/']
 
 // Routes that should redirect to home if authenticated
-const authRoutes = ['/login', '/signup']
+const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
