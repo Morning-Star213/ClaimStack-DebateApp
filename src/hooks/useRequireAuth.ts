@@ -38,7 +38,7 @@ export function useProtectedRoute() {
 
   const canAccess = (route: string): boolean => {
     // Allow access to home page and auth pages
-    if (route === '/' || route.startsWith('/login') || route.startsWith('/signup')) {
+    if (route === '/' || route.startsWith('/login') || route.startsWith('/signup') || route.startsWith('/forgot-password') || route.startsWith('/reset-password')) {
       return true
     }
 

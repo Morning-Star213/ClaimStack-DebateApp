@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/useAuth'
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const { isAuthenticated } = useAuth()
-  const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/signup')
+  const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/signup') || pathname?.startsWith('/forgot-password') || pathname?.startsWith('/reset-password')
   const isHomePage = pathname === '/'
 
   if (isAuthPage) {
