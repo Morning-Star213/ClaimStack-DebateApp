@@ -11,10 +11,13 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const sessionToken = request.cookies.get('claimstack_session')?.value
 
+  // Create response
+  const response = NextResponse.next()
+
   // Allow access to public routes without authentication
   const isPublicRoute = publicRoutes.some((route) => pathname === route)
   if (isPublicRoute) {
-    return NextResponse.next()
+    return response
   }
 
   // Check if route is auth route
@@ -27,7 +30,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/browse', request.url))
     }
     // Allow access to auth pages if not authenticated
-    return NextResponse.next()
+    return response
   }
 
   // Redirect to home page if accessing any other route without session
@@ -35,7 +38,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
