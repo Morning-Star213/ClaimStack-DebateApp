@@ -8,7 +8,6 @@ const SMTP_PASSWORD = process.env.SMTP_PASSWORD || ''
 const SMTP_FROM_EMAIL = process.env.SMTP_FROM_EMAIL || SMTP_USER
 const SMTP_FROM_NAME = process.env.SMTP_FROM_NAME || 'ClaimStack'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || 'http://localhost:3000'
-
 // Create reusable transporter
 let transporter: nodemailer.Transporter | null = null
 

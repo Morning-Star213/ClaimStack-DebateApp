@@ -64,6 +64,18 @@ const isPdfUrl = (url?: string): boolean => {
   return lowerUrl.endsWith('.pdf') || lowerUrl.includes('.pdf?') || lowerUrl.includes('.pdf#')
 }
 
+// Helper function to extract base website URL from a PDF URL
+const getBaseWebsiteUrl = (url: string): string => {
+  try {
+    const urlObj = new URL(url)
+    return `${urlObj.protocol}//${urlObj.hostname}`
+  } catch (error) {
+    // If URL parsing fails, try to extract manually
+    const match = url.match(/^(https?:\/\/[^\/]+)/)
+    return match ? match[1] : url
+  }
+}
+
 // Helper function to extract YouTube video ID
 const getYouTubeVideoId = (url: string): string | null => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -157,13 +169,49 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
   const [oEmbedData, setOEmbedData] = useState<OEmbedData | null>(null)
   const [oEmbedLoading, setOEmbedLoading] = useState(false)
   const [oEmbedError, setOEmbedError] = useState(false)
+  const [pdfIframeError, setPdfIframeError] = useState(false)
+  const [pdfObjectError, setPdfObjectError] = useState(false)
+  const [urlPdfIframeError, setUrlPdfIframeError] = useState(false)
+  const [urlPdfObjectError, setUrlPdfObjectError] = useState(false)
+  const [pdfLoadTimeout, setPdfLoadTimeout] = useState(false)
+  const [websiteIframeError, setWebsiteIframeError] = useState(false)
+  const [showWebsiteIframe, setShowWebsiteIframe] = useState(true)
+  const [showWebsiteFallback, setShowWebsiteFallback] = useState(false)
   const embedContainerRef = useRef<HTMLDivElement>(null)
   const scriptLoadedRef = useRef<{ [key: string]: boolean }>({})
+  const pdfIframeRef = useRef<HTMLIFrameElement>(null)
+  const urlPdfIframeRef = useRef<HTMLIFrameElement>(null)
+  const websiteIframeRef = useRef<HTMLIFrameElement>(null)
+  const pdfWebsiteIframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Reset file error when fileUrl changes
+  // Reset file error when fileUrl or url changes
   useEffect(() => {
     setFileError(false)
-  }, [fileUrl])
+    setPdfIframeError(false)
+    setPdfObjectError(false)
+    setUrlPdfIframeError(false)
+    setUrlPdfObjectError(false)
+    setPdfLoadTimeout(false)
+    setWebsiteIframeError(false)
+    setShowWebsiteIframe(true)
+    setShowWebsiteFallback(false)
+  }, [fileUrl, url])
+
+  // Monitor PDF iframe for potential load issues (for external URLs that block embedding)
+  useEffect(() => {
+    if (!url || !isPdfUrl(url)) return
+    
+    // Set a timeout to detect if PDF might be blocked
+    const timeout = setTimeout(() => {
+      // If iframe hasn't triggered an error yet, check if we should show a fallback message
+      // We can't directly detect cross-origin errors, but we can show a helpful message
+      if (!urlPdfIframeError && !urlPdfObjectError) {
+        setPdfLoadTimeout(true)
+      }
+    }, 3000) // 3 second timeout
+    
+    return () => clearTimeout(timeout)
+  }, [url, urlPdfIframeError, urlPdfObjectError])
 
   // Fetch oEmbed data when URL changes
   useEffect(() => {
@@ -395,10 +443,93 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             )
           }
           
-          // PDF files - display in iframe
+          // PDF files - display with fallback options
           if (fileCategory === 'document' && (fileType?.toLowerCase().includes('pdf') || fileName?.toLowerCase().endsWith('.pdf') || isPdfUrl(fileUrl))) {
+            // If iframe failed, try object tag
+            if (pdfIframeError && !pdfObjectError) {
+              return (
+                <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
+                  <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
+                    <div className="flex items-center gap-2">
+                      <PdfIcon className="w-5 h-5 text-red-600" />
+                      {fileName && (
+                        <span className="text-sm font-medium text-gray-700">{fileName}</span>
+                      )}
+                      {fileSize && (
+                        <span className="text-xs text-gray-500">({formatFileSize(fileSize)})</span>
+                      )}
+                    </div>
+                    <a
+                      href={fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                    >
+                      Open in new tab
+                    </a>
+                  </div>
+                  <object
+                    data={`${fileUrl}#toolbar=1&navpanes=1&scrollbar=1`}
+                    type="application/pdf"
+                    className="w-full flex-1 border-0"
+                    style={{ minHeight: '500px' }}
+                    onError={() => setPdfObjectError(true)}
+                  >
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      <div className="text-center p-6">
+                        <PdfIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
+                        <p className="text-sm text-gray-700 mb-2">Unable to display PDF in browser</p>
+                        <a
+                          href={fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                          Open PDF in new tab
+                        </a>
+                      </div>
+                    </div>
+                  </object>
+                </div>
+              )
+            }
+            
+            // If both iframe and object failed, show fallback UI
+            if (pdfIframeError && pdfObjectError) {
+              return (
+                <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <PdfIcon className="w-20 h-20 text-red-600" />
+                    <div className="text-center">
+                      {fileName && (
+                        <p className="text-lg font-medium text-gray-700 mb-1">{fileName}</p>
+                      )}
+                      {fileSize && (
+                        <p className="text-sm text-gray-500 mb-4">{formatFileSize(fileSize)}</p>
+                      )}
+                      <p className="text-sm text-gray-600 mb-4">
+                        This PDF cannot be embedded due to security restrictions.
+                      </p>
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-6 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Open PDF in new tab
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+            
+            // Try iframe first
             return (
-              <div className="w-full h-[100px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
+              <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
                   <div className="flex items-center gap-2">
                     <PdfIcon className="w-5 h-5 text-red-600" />
@@ -419,9 +550,12 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                   </a>
                 </div>
                 <iframe
-                  src={fileUrl}
+                  ref={pdfIframeRef}
+                  src={`${fileUrl}#toolbar=1&navpanes=1&scrollbar=1`}
                   className="w-full flex-1 border-0"
                   title={fileName || 'PDF Document'}
+                  style={{ minHeight: '500px' }}
+                  onError={() => setPdfIframeError(true)}
                 />
               </div>
             )
@@ -480,6 +614,181 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           {(() => {
             // Check if URL is a PDF
             if (isPdfUrl(url)) {
+              // If iframe failed, try object tag
+              if (urlPdfIframeError && !urlPdfObjectError) {
+                return (
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
+                      <PdfIcon className="w-5 h-5 text-red-600" />
+                      <span className="font-medium">PDF Document</span>
+                    </div>
+                    <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
+                      <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
+                        <span className="text-sm font-medium text-gray-700">PDF Viewer</span>
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                        >
+                          Open in new tab
+                        </a>
+                      </div>
+                      <object
+                        data={`${url}#toolbar=1&navpanes=1&scrollbar=1`}
+                        type="application/pdf"
+                        className="w-full flex-1 border-0"
+                        style={{ minHeight: '500px' }}
+                        onError={() => setUrlPdfObjectError(true)}
+                      >
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <div className="text-center p-6">
+                            <PdfIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
+                            <p className="text-sm text-gray-700 mb-2">Unable to display PDF in browser</p>
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                            >
+                              Open PDF in new tab
+                            </a>
+                          </div>
+                        </div>
+                      </object>
+                    </div>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                    >
+                      <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                      <span className="break-all">{url}</span>
+                    </a>
+                  </div>
+                )
+              }
+              
+              // If both iframe and object failed, show website in iframe as fallback
+              if (urlPdfIframeError && urlPdfObjectError) {
+                const baseWebsiteUrl = getBaseWebsiteUrl(url)
+                
+                // Show website in iframe so user can navigate and pass verification
+                if (showWebsiteFallback) {
+                  return (
+                    <div className="flex flex-col space-y-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2 text-sm text-gray-700">
+                          <PdfIcon className="w-5 h-5 text-red-600" />
+                          <span className="font-medium">PDF Document - Website View</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setShowWebsiteFallback(false)}
+                            className="text-xs text-gray-500 hover:text-gray-700 underline"
+                          >
+                            Show options
+                          </button>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                          >
+                            Open PDF in new tab
+                          </a>
+                        </div>
+                      </div>
+                      <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden border border-gray-300 relative">
+                        <div className="absolute top-0 left-0 right-0 bg-blue-50 border-b border-blue-200 p-2 z-10">
+                          <p className="text-xs text-blue-800 text-center">
+                            <strong>Note:</strong> Navigate to the PDF within this website. You may need to complete verification (CAPTCHA) first.
+                            The PDF URL is: <span className="font-mono text-xs break-all">{url}</span>
+                          </p>
+                        </div>
+                        <iframe
+                          ref={pdfWebsiteIframeRef}
+                          src={baseWebsiteUrl}
+                          className="w-full h-full border-0"
+                          title="Website for PDF Access"
+                          style={{ minHeight: '600px', marginTop: '40px' }}
+                          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+                          onError={() => {
+                            // If website iframe also fails, show final fallback
+                            setShowWebsiteFallback(false)
+                          }}
+                        />
+                      </div>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                      >
+                        <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                        <span className="break-all">{url}</span>
+                      </a>
+                    </div>
+                  )
+                }
+                
+                // Show options to try website view or open directly
+                return (
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
+                      <PdfIcon className="w-5 h-5 text-red-600" />
+                      <span className="font-medium">PDF Document</span>
+                    </div>
+                    <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6">
+                      <div className="flex flex-col items-center justify-center space-y-4">
+                        <PdfIcon className="w-20 h-20 text-red-600" />
+                        <div className="text-center">
+                          <p className="text-sm text-gray-600 mb-2">
+                            This PDF cannot be embedded due to security restrictions.
+                          </p>
+                          <p className="text-xs text-gray-500 mb-4">
+                            The website may require verification (CAPTCHA) to access the PDF.
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <button
+                              onClick={() => setShowWebsiteFallback(true)}
+                              className="inline-flex items-center px-6 py-3 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                              </svg>
+                              Open Website (for verification)
+                            </button>
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-6 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                              Open PDF in new tab
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                    >
+                      <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                      <span className="break-all">{url}</span>
+                    </a>
+                  </div>
+                )
+              }
+              
+              // Try iframe first
               return (
                 <div className="flex flex-col space-y-3">
                   <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
@@ -499,11 +808,26 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                       </a>
                     </div>
                     <iframe
-                      src={url}
+                      ref={urlPdfIframeRef}
+                      src={`${url}#toolbar=1&navpanes=1&scrollbar=1`}
                       className="w-full flex-1 border-0"
                       title="PDF Document"
+                      style={{ minHeight: '500px' }}
+                      onError={() => setUrlPdfIframeError(true)}
+                      onLoad={() => {
+                        // Reset timeout on successful load
+                        setPdfLoadTimeout(false)
+                      }}
                     />
                   </div>
+                  {pdfLoadTimeout && !urlPdfIframeError && (
+                    <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-xs text-yellow-800">
+                        <strong>Note:</strong> If you see an error message above (like "refused to connect"), 
+                        the PDF cannot be embedded. Click "Open in new tab" above to view it.
+                      </p>
+                    </div>
+                  )}
                   <a
                     href={url}
                     target="_blank"
@@ -663,12 +987,102 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
               )
             }
             
-            // Default: Show as link for non-embeddable content
+            // Default: Try to display external websites in iframe, fallback to link
+            // Check if this is a regular website (not PDF, not social media)
+            const isRegularWebsite = !isPdfUrl(url) && !isEmbeddable
+            
+            if (isRegularWebsite && showWebsiteIframe && !websiteIframeError) {
+              return (
+                <div className="flex flex-col space-y-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2 text-sm text-gray-700">
+                      <div className="text-blue-600">{icon}</div>
+                      <span className="font-medium">{platform}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setShowWebsiteIframe(false)}
+                        className="text-xs text-gray-500 hover:text-gray-700 underline"
+                      >
+                        Show as link
+                      </button>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                      >
+                        Open in new tab
+                      </a>
+                    </div>
+                  </div>
+                  <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden border border-gray-300 relative">
+                    <iframe
+                      ref={websiteIframeRef}
+                      src={url}
+                      className="w-full h-full border-0"
+                      title="External Website"
+                      style={{ minHeight: '600px' }}
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+                      onError={() => setWebsiteIframeError(true)}
+                      onLoad={() => {
+                        // Reset error on successful load
+                        setWebsiteIframeError(false)
+                      }}
+                    />
+                    {websiteIframeError && (
+                      <div className="absolute inset-0 bg-white flex items-center justify-center p-6">
+                        <div className="text-center">
+                          <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <p className="text-sm text-gray-700 mb-2">
+                            This website cannot be embedded due to security restrictions.
+                          </p>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                          >
+                            Open in new tab
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                  >
+                    <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                    <span className="break-all">{url}</span>
+                  </a>
+                </div>
+              )
+            }
+            
+            // Fallback: Show as link
             return (
               <div className="flex flex-col space-y-3">
-                <div className="flex items-center space-x-2 text-sm text-gray-700">
-                  <div className="text-blue-600">{icon}</div>
-                  <span className="font-medium">{platform}</span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2 text-sm text-gray-700">
+                    <div className="text-blue-600">{icon}</div>
+                    <span className="font-medium">{platform}</span>
+                  </div>
+                  {isRegularWebsite && (
+                    <button
+                      onClick={() => {
+                        setShowWebsiteIframe(true)
+                        setWebsiteIframeError(false)
+                      }}
+                      className="text-xs text-gray-500 hover:text-gray-700 underline"
+                    >
+                      Try iframe view
+                    </button>
+                  )}
                 </div>
                 <a
                   href={url}

@@ -36,11 +36,12 @@ export default function ClaimDetailPage() {
   const { currentClaim, setCurrentClaim, updateClaim } = useClaimsStore()
   const { evidence, perspectives, setEvidence, setPerspectives, updateEvidence, updatePerspective } = useEvidenceStore()
   const [loading, setLoading] = useState(true)
+  const [claimLoading, setClaimLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filters, setFilters] = useState<FilterValues | null>(null)
   
-  // Use claim from store or local state
-  const claim = currentClaim
+  // Use claim from store or local state - only use it if it matches the current claimId
+  const claim = currentClaim && currentClaim.id === claimId ? currentClaim : null
 
   // Use hooks for claim vote and follow
   const claimVote = useVote({
@@ -62,6 +63,11 @@ export default function ClaimDetailPage() {
   useEffect(() => {
     const fetchClaim = async () => {
       if (!claimId) return
+      
+      // Clear previous claim and set loading state
+      setCurrentClaim(null)
+      setClaimLoading(true)
+      
       try {
         const response = await fetch(`/api/claims/${claimId}`, {
           credentials: 'include',
@@ -72,9 +78,14 @@ export default function ClaimDetailPage() {
           setCurrentClaim(data.claim)
           // Update global store
           updateClaim(claimId, data.claim)
+        } else {
+          throw new Error('Claim not found')
         }
       } catch (err) {
         console.error('Error fetching claim:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch claim')
+      } finally {
+        setClaimLoading(false)
       }
     }
     fetchClaim()
@@ -235,7 +246,7 @@ export default function ClaimDetailPage() {
             </div>
           </div>
           <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6 sm:mb-10 leading-tight">
-            {claim?.title || 'Loading...'}
+            {claimLoading ? 'Loading...' : (claim?.title || 'Claim not found')}
           </p>
           
           {/* Two Column Layout: Media on Left, Metadata on Right */}
@@ -244,7 +255,11 @@ export default function ClaimDetailPage() {
             <div className="flex flex-col space-y-1 h-full">
               <h2 className="text-xl font-semibold text-[#030303] mb-1">Media</h2>
               <div className="flex-1 flex flex-col">
-                {(claim?.fileUrl || claim?.url) ? (
+                {claimLoading ? (
+                  <div className="w-full flex-1 bg-gray-200 rounded-lg flex items-center justify-center min-h-[400px]">
+                    <p className="text-gray-500 text-sm">Loading...</p>
+                  </div>
+                ) : (claim?.fileUrl || claim?.url) ? (
                   <div className="flex-1">
                     <MediaDisplay
                       fileUrl={claim.fileUrl}
@@ -266,12 +281,14 @@ export default function ClaimDetailPage() {
             {/* Right Section: Detailed Metadata */}
             <div className="space-y-5 border-l border-gray-200 pl-8 h-full">
               <h2 className="text-xl font-semibold text-[#030303] mb-5">Description</h2>
-              {claim?.description && (
+              {claimLoading ? (
+                <p className="text-sm sm:text-base text-gray-500 leading-relaxed mb-6 sm:mb-8">Loading...</p>
+              ) : claim?.description ? (
                 <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-6 sm:mb-8">
                   {claim.description}
                 </p>
-              )}
-              {claim?.forSummary && (
+              ) : null}
+              {!claimLoading && claim?.forSummary && (
                 <div>
                   <h2 className="text-xl font-semibold text-[#030303] mb-5">AI Summary</h2>
                   <p className="text-sm text-[#030303]">{claim.forSummary}</p>
@@ -279,6 +296,11 @@ export default function ClaimDetailPage() {
               )}              
               <h2 className="text-xl font-semibold text-[#030303] mb-5 pt-10">Details</h2>
               
+              {claimLoading ? (
+                <div className="space-y-4 text-sm">
+                  <p className="text-gray-500">Loading details...</p>
+                </div>
+              ) : (
               <div className="space-y-4 text-sm">
                 <div className="grid grid-cols-2 gap-4">
                   {claim?.category && (
@@ -361,6 +383,7 @@ export default function ClaimDetailPage() {
                   </div>
                 )}
               </div>
+              )}
             </div>
           </div>
           {/* Toggle Summaries Button */}

@@ -16,7 +16,7 @@ const createEvidenceSchema = z.object({
   fileName: z.string().optional(),
   fileSize: z.number().optional(),
   fileType: z.string().optional(),
-  title: z.string().max(500).optional(),
+  title: z.string().optional(),
   description: z.string().max(500).optional(),
   position: z.enum(['for', 'against']),
 })
