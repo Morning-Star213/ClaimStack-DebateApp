@@ -877,15 +877,6 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                           <strong>Note:</strong> If you see an error message above (like "refused to connect"), 
                           the PDF cannot be embedded directly. Try the website view to access it through the hosting website.
                         </p>
-                        <button
-                          onClick={() => {
-                            setUrlPdfIframeError(true)
-                            setUrlPdfObjectError(true)
-                          }}
-                          className="text-xs text-blue-600 hover:text-blue-800 underline whitespace-nowrap font-medium"
-                        >
-                          Use website view →
-                        </button>
                       </div>
                     </div>
                   )}
