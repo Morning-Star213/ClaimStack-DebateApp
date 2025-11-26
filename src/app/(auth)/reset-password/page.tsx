@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
   // Validate token and email on mount
   useEffect(() => {
     if (!token || !email) {
-      setErrors({ general: 'Invalid reset link. Please request a new password reset.' })
+      // setErrors({ general: 'Invalid reset link. Please request a new password reset.' })
     }
   }, [token, email])
 
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
     }
 
     if (!token || !email) {
-      newErrors.general = 'Invalid reset link. Please request a new password reset.'
+      // newErrors.general = 'Invalid reset link. Please request a new password reset.'
     }
 
     if (Object.keys(newErrors).length > 0) {

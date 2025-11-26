@@ -70,7 +70,6 @@ const EvidenceSchema = new Schema<IEvidence>(
     },
     title: {
       type: String,
-      maxlength: 500,
     },
     description: {
       type: String,
