@@ -100,12 +100,6 @@ export const TopUsers: React.FC = () => {
                     unoptimized
                   />
                 </div>
-                {/* Badge for top 3 users */}
-                {users.indexOf(user) < 3 && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-gray-900 border-2 border-white">
-                    {users.indexOf(user) + 1}
-                  </div>
-                )}
               </div>
               <div className="text-center max-w-[80px] sm:max-w-[100px]">
                 <p className="text-xs sm:text-sm font-medium text-gray-900 truncate w-full group-hover:text-blue-600 transition-colors">

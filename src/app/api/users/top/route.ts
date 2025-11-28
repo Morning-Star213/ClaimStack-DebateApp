@@ -6,13 +6,16 @@ import { Evidence, EvidenceStatus } from '@/lib/db/models'
 import { Perspective, PerspectiveStatus } from '@/lib/db/models'
 import mongoose from 'mongoose'
 
+// Mark route as dynamic to prevent static generation
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     // Ensure database connection
     await connectDB()
 
     // Get query parameters
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '10', 10)
 
     // Aggregate upvotes from Claims, Evidence, and Perspectives

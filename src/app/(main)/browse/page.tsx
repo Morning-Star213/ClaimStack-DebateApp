@@ -67,9 +67,13 @@ export default function BrowsePage() {
           </div>
         </div>
         
-        <div className='flex flex-col sm:flex-row gap-4 sm:gap-16'>
-          <TopUsers />
-          <PopularClaimsCarousel />
+        <div className='flex flex-col sm:flex-row gap-4 sm:gap-4'>
+          <div className='w-full sm:w-1/2'>
+            <TopUsers />
+          </div>
+          <div className='w-full sm:w-1/2'>
+            <PopularClaimsCarousel className='sm:mt-8'/>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
