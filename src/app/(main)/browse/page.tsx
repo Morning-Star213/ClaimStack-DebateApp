@@ -46,6 +46,43 @@ export default function BrowsePage() {
     )
   })
 
+  // Sort claims based on activeTab
+  const sortedClaims = [...filteredClaims].sort((a, b) => {
+    switch (activeTab) {
+      case 'newest':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      
+      case 'oldest':
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      
+      case 'most-voted':
+        const aVotes = a.upvotes || 0
+        const bVotes = b.upvotes || 0
+        if (bVotes !== aVotes) {
+          return bVotes - aVotes
+        }
+        // Secondary sort by newest if votes are equal
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      
+      case 'most-viewed':
+        const aViews = a.viewCount || 0
+        const bViews = b.viewCount || 0
+        return bViews - aViews
+      
+      case 'most-followed':
+        const aFollows = a.followCount || 0
+        const bFollows = b.followCount || 0
+        if (bFollows !== aFollows) {
+          return bFollows - aFollows
+        }
+        // Secondary sort by newest if follows are equal
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      
+      default:
+        return 0
+    }
+  })
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
@@ -113,14 +150,14 @@ export default function BrowsePage() {
           </div>
         )}
 
-        {!isLoading && !error && filteredClaims.length === 0 && (
+        {!isLoading && !error && sortedClaims.length === 0 && (
           <div className="text-center py-8">
             <p className="text-gray-600">No approved claims found.</p>
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {filteredClaims.map((claim) => (
+          {sortedClaims.map((claim) => (
             <ContentCard key={claim.id} item={claim} />
           ))}
         </div>

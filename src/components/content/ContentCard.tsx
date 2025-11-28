@@ -292,11 +292,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       <div className="border-t border-gray-200 pt-3 sm:pt-4 mt-3 sm:mt-4">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           <Button
-            variant="secondary"
+            variant="primary"
             size="sm"
             onClick={handleFollow}
             disabled={isFollowingAction}
-            className="bg-black text-white hover:bg-gray-800 rounded-full text-xs sm:text-sm px-3 sm:px-4 flex-shrink-0"
+            className="text-white rounded-full text-xs sm:text-sm px-3 sm:px-4 flex-shrink-0"
           >
             {isFollowing ? 'Following' : 'Follow'}
           </Button>
