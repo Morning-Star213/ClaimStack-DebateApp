@@ -80,6 +80,13 @@ export default function LoginPage() {
         {/* Logo - Top Center of Right Side */}
         <div className="flex justify-center pt-12 lg:pt-20">
           <div className="flex items-center space-x-2">
+            <Image
+              src="/images/logo.png"
+              alt="ClaimStack Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
             <span className="text-base font-semibold text-gray-900 dark:text-gray-100">ClaimStack</span>
           </div>
         </div>

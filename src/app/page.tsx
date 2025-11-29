@@ -10,6 +10,7 @@ import { FilterButton } from '@/components/ui/FilterButton'
 import { FilterValues } from '@/components/ui/FilterModal'
 import { ProtectedLink } from '@/components/ui/ProtectedLink'
 import { useClaimsStore } from '@/store/claimsStore'
+import { AnimatedDots } from '@/components/ui/AnimatedDots'
 
 export default function HomePage() {
   const { claims, isLoading, error, fetchApprovedClaims } = useClaimsStore()
@@ -53,6 +54,8 @@ export default function HomePage() {
           background: 'linear-gradient(to bottom, rgba(17, 24, 39, 0.3), rgba(17, 24, 39, 0))',
         }}
       />
+      {/* Animated Dots Background */}
+      <AnimatedDots />
       {/* Hero Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">

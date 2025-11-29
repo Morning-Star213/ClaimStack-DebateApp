@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
@@ -35,6 +36,13 @@ export const Header: React.FC = () => {
           {/* Logo and Navigation */}
           <div className="flex items-center space-x-4 sm:space-x-6 lg:space-x-8">
             <Link href="/" className="flex items-center space-x-2">
+              <Image
+                src="/images/logo.png"
+                alt="ClaimStack Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
               <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">ClaimStack</span>
             </Link>
 

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { MenuIcon, XIcon } from '@/components/ui/Icons'
@@ -55,7 +56,14 @@ export const PreLoginHeader: React.FC = () => {
           {/* Left Side - Logo and Navigation */}
           <div className="flex items-center space-x-4 sm:space-x-8">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <Image
+                src="/images/logo.png"
+                alt="ClaimStack Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
               <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Claimstack</span>
             </Link>
 
