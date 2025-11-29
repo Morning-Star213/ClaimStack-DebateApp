@@ -402,7 +402,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           
           if (fileCategory === 'image' && !fileError) {
             return (
-              <div className="w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
+              <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                 <img
                   src={fileUrl}
                   alt={title}
@@ -415,7 +415,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           
           if (fileCategory === 'video' && !fileError) {
             return (
-              <div className="w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
+              <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                 <video
                   src={fileUrl}
                   controls
@@ -430,7 +430,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           
           if (fileCategory === 'audio' && !fileError) {
             return (
-              <div className="w-full bg-gray-200 rounded-lg p-4">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-lg p-4">
                 <audio
                   src={fileUrl}
                   controls
@@ -440,7 +440,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                   Your browser does not support the audio tag.
                 </audio>
                 {fileName && (
-                  <p className="text-sm text-gray-600 mt-2 text-center">{fileName}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 text-center">{fileName}</p>
                 )}
               </div>
             )
@@ -452,21 +452,21 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             if (pdfIframeError && !pdfObjectError) {
               return (
                 <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
-                  <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
+                  <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
                     <div className="flex items-center gap-2">
-                      <PdfIcon className="w-5 h-5 text-red-600" />
+                      <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                       {fileName && (
-                        <span className="text-sm font-medium text-gray-700">{fileName}</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{fileName}</span>
                       )}
                       {fileSize && (
-                        <span className="text-xs text-gray-500">({formatFileSize(fileSize)})</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">({formatFileSize(fileSize)})</span>
                       )}
                     </div>
                     <a
                       href={fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                     >
                       Open in new tab
                     </a>
@@ -478,15 +478,15 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                     style={{ minHeight: '500px' }}
                     onError={() => setPdfObjectError(true)}
                   >
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
                       <div className="text-center p-6">
-                        <PdfIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
-                        <p className="text-sm text-gray-700 mb-2">Unable to display PDF in browser</p>
+                        <PdfIcon className="w-16 h-16 text-red-600 dark:text-red-400 mx-auto mb-4" />
+                        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Unable to display PDF in browser</p>
                         <a
                           href={fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                          className="inline-flex items-center px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                         >
                           Open PDF in new tab
                         </a>
@@ -500,24 +500,24 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             // If both iframe and object failed, show fallback UI
             if (pdfIframeError && pdfObjectError) {
               return (
-                <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6">
+                <div className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                   <div className="flex flex-col items-center justify-center space-y-4">
-                    <PdfIcon className="w-20 h-20 text-red-600" />
+                    <PdfIcon className="w-20 h-20 text-red-600 dark:text-red-400" />
                     <div className="text-center">
                       {fileName && (
-                        <p className="text-lg font-medium text-gray-700 mb-1">{fileName}</p>
+                        <p className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">{fileName}</p>
                       )}
                       {fileSize && (
-                        <p className="text-sm text-gray-500 mb-4">{formatFileSize(fileSize)}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{formatFileSize(fileSize)}</p>
                       )}
-                      <p className="text-sm text-gray-600 mb-4">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                         This PDF cannot be embedded due to security restrictions.
                       </p>
                       <a
                         href={fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-6 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                        className="inline-flex items-center px-6 py-3 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                       >
                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -533,21 +533,21 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             // Try iframe first
             return (
               <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
-                <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
+                <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
                   <div className="flex items-center gap-2">
-                    <PdfIcon className="w-5 h-5 text-red-600" />
+                    <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                     {fileName && (
-                      <span className="text-sm font-medium text-gray-700">{fileName}</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{fileName}</span>
                     )}
                     {fileSize && (
-                      <span className="text-xs text-gray-500">({formatFileSize(fileSize)})</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">({formatFileSize(fileSize)})</span>
                     )}
                   </div>
                   <a
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                   >
                     Open in new tab
                   </a>
@@ -577,29 +577,29 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             <div className="w-full bg-gray-200 rounded-lg p-6">
               <div className="flex flex-col items-center justify-center space-y-4">
                 {fileCategory === 'document' ? (
-                  <svg className="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-20 h-20 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 ) : (
-                  <svg className="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-20 h-20 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 )}
                 <div className="text-center">
                   {fileName && (
-                    <p className="text-sm font-medium text-gray-700 mb-1">{fileName}</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{fileName}</p>
                   )}
                   {fileType && (
-                    <p className="text-xs text-gray-500 mb-2">{fileType}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{fileType}</p>
                   )}
                   {fileSize && (
-                    <p className="text-xs text-gray-500 mb-3">{formatFileSize(fileSize)}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{formatFileSize(fileSize)}</p>
                   )}
                   <a
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                    className="inline-flex items-center px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                   >
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -612,8 +612,8 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           )
         })()
       ) : !url ? (
-        <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-          <svg className="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+          <svg className="w-20 h-20 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
@@ -621,7 +621,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
       
       {/* External URL Display */}
       {url && (
-        <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
           {(() => {
             // Check if URL is a PDF
             if (isPdfUrl(url)) {
@@ -629,18 +629,18 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
               if (urlPdfIframeError && !urlPdfObjectError) {
                 return (
                   <div className="flex flex-col space-y-3">
-                    <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
-                      <PdfIcon className="w-5 h-5 text-red-600" />
+                    <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                       <span className="font-medium">PDF Document</span>
                     </div>
-                    <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
-                      <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
-                        <span className="text-sm font-medium text-gray-700">PDF Viewer</span>
+                    <div className="w-full h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex flex-col">
+                      <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">PDF Viewer</span>
                         <a
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                         >
                           Open in new tab
                         </a>
@@ -652,15 +652,15 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                         style={{ minHeight: '500px' }}
                         onError={() => setUrlPdfObjectError(true)}
                       >
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
                           <div className="text-center p-6">
-                            <PdfIcon className="w-16 h-16 text-red-600 mx-auto mb-4" />
-                            <p className="text-sm text-gray-700 mb-2">Unable to display PDF in browser</p>
+                            <PdfIcon className="w-16 h-16 text-red-600 dark:text-red-400 mx-auto mb-4" />
+                            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Unable to display PDF in browser</p>
                             <a
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                              className="inline-flex items-center px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                             >
                               Open PDF in new tab
                             </a>
@@ -690,14 +690,14 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                   return (
                     <div className="flex flex-col space-y-3">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2 text-sm text-gray-700">
-                          <PdfIcon className="w-5 h-5 text-red-600" />
+                        <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                          <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                           <span className="font-medium">PDF Document - Website View</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setShowWebsiteFallback(false)}
-                            className="text-xs text-gray-500 hover:text-gray-700 underline"
+                            className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline"
                           >
                             Show options
                           </button>
@@ -705,15 +705,15 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                           >
                             Open PDF in new tab
                           </a>
                         </div>
                       </div>
-                      <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden border border-gray-300 relative">
-                        <div className="absolute top-0 left-0 right-0 bg-blue-50 border-b border-blue-200 p-2 z-10">
-                          <p className="text-xs text-blue-800 text-center">
+                      <div className="w-full h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 relative">
+                        <div className="absolute top-0 left-0 right-0 bg-blue-50 dark:bg-blue-900/30 border-b border-blue-200 dark:border-blue-700 p-2 z-10">
+                          <p className="text-xs text-blue-800 dark:text-blue-200 text-center">
                             <strong>Note:</strong> Navigate to the PDF within this website. You may need to complete verification (CAPTCHA) first.
                             The PDF URL is: <span className="font-mono text-xs break-all">{url}</span>
                           </p>
@@ -747,24 +747,24 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                 // Show options to try website view or open directly
                 return (
                   <div className="flex flex-col space-y-3">
-                    <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
-                      <PdfIcon className="w-5 h-5 text-red-600" />
+                    <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                       <span className="font-medium">PDF Document</span>
                     </div>
-                    <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6">
+                    <div className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                       <div className="flex flex-col items-center justify-center space-y-4">
-                        <PdfIcon className="w-20 h-20 text-red-600" />
+                        <PdfIcon className="w-20 h-20 text-red-600 dark:text-red-400" />
                         <div className="text-center">
-                          <p className="text-sm text-gray-600 mb-2">
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                             This PDF cannot be embedded due to security restrictions.
                           </p>
-                          <p className="text-xs text-gray-500 mb-4">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
                             The website may require verification (CAPTCHA) to access the PDF.
                           </p>
                           <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <button
                               onClick={() => setShowWebsiteFallback(true)}
-                              className="inline-flex items-center px-6 py-3 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors"
+                              className="inline-flex items-center px-6 py-3 bg-green-500 dark:bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
                             >
                               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
@@ -775,7 +775,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center px-6 py-3 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                              className="inline-flex items-center px-6 py-3 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                             >
                               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -790,7 +790,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs break-all underline flex items-start space-x-2"
                     >
                       <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
                       <span className="break-all">{url}</span>
@@ -802,18 +802,18 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
               // Try iframe first
               return (
                 <div className="flex flex-col space-y-3">
-                  <div className="flex items-center space-x-2 text-sm text-gray-700 mb-2">
-                    <PdfIcon className="w-5 h-5 text-red-600" />
+                  <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    <PdfIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                     <span className="font-medium">PDF Document</span>
                   </div>
-                  <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden flex flex-col">
-                    <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
-                      <span className="text-sm font-medium text-gray-700">PDF Viewer</span>
+                  <div className="w-full h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex flex-col">
+                    <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">PDF Viewer</span>
                       <a
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                       >
                         Open in new tab
                       </a>
@@ -850,9 +850,9 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                     />
                   </div>
                   {pdfLoadTimeout && !urlPdfIframeError && (
-                    <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="text-xs text-yellow-800 flex-1">
+                        <p className="text-xs text-yellow-800 dark:text-yellow-200 flex-1">
                           <strong>Note:</strong> If you see an error message above (like "refused to connect"), 
                           the PDF cannot be embedded directly. Try the website view to access it through the hosting website.
                         </p>
@@ -863,7 +863,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs break-all underline flex items-start space-x-2"
                   >
                     <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
                     <span className="break-all">{url}</span>

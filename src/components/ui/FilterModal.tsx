@@ -86,17 +86,17 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         onClick={onClose}
       />
       {/* Filter Modal - centered modal on mobile, dropdown on desktop */}
-      <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 overflow-y-auto">
+      <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-y-auto">
         <div className="flex flex-col p-4 sm:p-6">
           {/* Header with title and close button */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Filters</h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               aria-label="Close"
             >
-              <XIcon className="w-5 h-5 text-gray-600" />
+              <XIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
@@ -104,7 +104,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
           <div className="space-y-5">
             {/* Select Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Select Category
               </label>
               <Dropdown
@@ -117,7 +117,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 
             {/* Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Date
               </label>
               <Dropdown
@@ -130,7 +130,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 
             {/* Evidence Attached */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Evidence Attached
               </label>
               <Dropdown
@@ -143,7 +143,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 
             {/* Your Interactions */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Your Interactions
               </label>
               <Dropdown
@@ -156,7 +156,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
           </div>
 
           {/* Apply Filters Button */}
-          <div className="mt-8 pt-4 border-t border-gray-200">
+          <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
             <Button
               onClick={handleApply}
               variant="primary"

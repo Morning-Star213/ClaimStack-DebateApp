@@ -55,6 +55,8 @@ import {
   HiOutlineSparkles,
   HiOutlineDocumentText,
   HiOutlineTrash,
+  HiOutlineSun,
+  HiOutlineMoon,
   // Heroicons - Solid
   HiThumbUp,
   HiThumbDown,
@@ -137,6 +139,8 @@ export {
   HiOutlineSparkles as SparklesIcon,
   HiOutlineDocumentText as DocumentIcon,
   HiOutlineTrash as TrashIcon,
+  HiOutlineSun as SunIcon,
+  HiOutlineMoon as MoonIcon,
   FaFilePdf as PdfIcon,
   
   // UI Elements

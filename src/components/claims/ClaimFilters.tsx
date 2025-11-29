@@ -99,7 +99,7 @@ export const ClaimFilters: React.FC<ClaimFiltersProps> = ({
       >
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Select Category
             </label>
             <Dropdown
@@ -110,7 +110,7 @@ export const ClaimFilters: React.FC<ClaimFiltersProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Date
             </label>
             <Dropdown
@@ -121,7 +121,7 @@ export const ClaimFilters: React.FC<ClaimFiltersProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Evidence Attached
             </label>
             <Dropdown
@@ -137,9 +137,9 @@ export const ClaimFilters: React.FC<ClaimFiltersProps> = ({
               id="followed"
               checked={filters.followed}
               onChange={(e) => setFilters({ ...filters, followed: e.target.checked })}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded"
             />
-            <label htmlFor="followed" className="text-sm text-gray-700">
+            <label htmlFor="followed" className="text-sm text-gray-700 dark:text-gray-300">
               Followed
             </label>
           </div>

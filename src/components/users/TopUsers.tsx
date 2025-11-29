@@ -49,7 +49,7 @@ export const TopUsers: React.FC = () => {
   if (isLoading) {
     return (
       <div className="mb-6 sm:mb-8">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Top Users
         </h2>
         <div className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2">
@@ -58,8 +58,8 @@ export const TopUsers: React.FC = () => {
               key={i}
               className="flex-shrink-0 w-20 sm:w-40 animate-pulse"
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-200 mb-2" />
-              <div className="h-4 bg-gray-200 rounded w-full" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-200 dark:bg-gray-700 mb-2" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
             </div>
           ))}
         </div>
@@ -73,7 +73,7 @@ export const TopUsers: React.FC = () => {
 
   return (
     <div className="mb-6 sm:mb-8 sm:mt-8">
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
         Top Users
       </h2>
       <div className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2 pt-2 scroll-smooth">
@@ -90,7 +90,7 @@ export const TopUsers: React.FC = () => {
               className="flex-shrink-0 flex flex-col items-center group cursor-pointer transition-transform hover:scale-105"
             >
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 mb-2">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-500 flex items-center justify-center overflow-hidden bg-white shadow-sm group-hover:shadow-md transition-shadow">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-blue-500 dark:border-blue-400 flex items-center justify-center overflow-hidden bg-white dark:bg-gray-800 shadow-sm group-hover:shadow-md transition-shadow">
                   <Image
                     src={avatarUrl}
                     alt={displayName}
@@ -102,10 +102,10 @@ export const TopUsers: React.FC = () => {
                 </div>
               </div>
               <div className="text-center max-w-[80px] sm:max-w-[100px]">
-                <p className="text-xs sm:text-sm font-medium text-gray-900 truncate w-full group-hover:text-blue-600 transition-colors">
+                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 truncate w-full group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {user.username}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                   {user.totalUpvotes} {user.totalUpvotes === 1 ? 'upvote' : 'upvotes'}
                 </p>
               </div>

@@ -49,14 +49,14 @@ export const PreLoginHeader: React.FC = () => {
   const avatarUrl = user?.avatarUrl || '/icons/user.png'
 
   return (
-    <header className="w-full bg-[#eef4ff] z-50">
+    <header className="w-full bg-[#eef4ff] dark:bg-gray-800 z-50 transition-colors">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left Side - Logo and Navigation */}
           <div className="flex items-center space-x-4 sm:space-x-8">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <span className="text-lg sm:text-xl font-semibold text-gray-900">Claimstack</span>
+              <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Claimstack</span>
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -70,8 +70,8 @@ export const PreLoginHeader: React.FC = () => {
                   type="button"
                   className={`px-4 xl:px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                     isCategoriesHovered
-                      ? 'text-blue-600 bg-blue-50 border border-blue-600'
-                      : 'text-gray-900 hover:text-gray-700'
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900 border border-blue-600 dark:border-blue-500'
+                      : 'text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   Categories
@@ -79,7 +79,7 @@ export const PreLoginHeader: React.FC = () => {
 
                 {/* Desktop Categories Dropdown */}
                 {isCategoriesHovered && (
-                  <div className="absolute top-full left-0 mt-2 w-[600px] xl:w-[900px] bg-white rounded-2xl shadow-xl border border-gray-200 p-4 xl:p-6 z-50">
+                  <div className="absolute top-full left-0 mt-2 w-[600px] xl:w-[900px] bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 xl:p-6 z-50">
                     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 xl:gap-x-6 gap-y-3">
                       {categories.map((category) => (
                         <ProtectedLink
@@ -87,8 +87,8 @@ export const PreLoginHeader: React.FC = () => {
                           href={`/browse?category=${encodeURIComponent(category)}`}
                           className={`px-4 xl:px-6 py-2 rounded-lg text-sm transition-colors whitespace-nowrap ${
                             hoveredCategory === category
-                              ? 'bg-blue-50 text-blue-600'
-                              : 'text-gray-700 hover:bg-gray-50'
+                              ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400'
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                           }`}
                           onMouseEnter={() => setHoveredCategory(category)}
                           onMouseLeave={() => setHoveredCategory(null)}
@@ -103,7 +103,7 @@ export const PreLoginHeader: React.FC = () => {
 
               <ProtectedLink
                 href="/browse?sort=trending"
-                className="text-sm font-medium text-gray-900 hover:text-gray-700 transition-colors"
+                className="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
               >
                 Trending
               </ProtectedLink>
@@ -139,7 +139,7 @@ export const PreLoginHeader: React.FC = () => {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900"
+                  className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
                   aria-label="Toggle menu"
                 >
                   {isMobileMenuOpen ? (
@@ -153,7 +153,7 @@ export const PreLoginHeader: React.FC = () => {
               <>
                 <Link
                   href="/login"
-                  className="hidden sm:block text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                  className="hidden sm:block text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                 >
                   Log In
                 </Link>
@@ -164,7 +164,7 @@ export const PreLoginHeader: React.FC = () => {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900"
+                  className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
                   aria-label="Toggle menu"
                 >
                   {isMobileMenuOpen ? (
@@ -180,11 +180,11 @@ export const PreLoginHeader: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200">
+          <div className="lg:hidden py-4 border-t border-gray-200 dark:border-gray-700">
             <nav className="flex flex-col space-y-4">
               <button
                 onClick={() => setIsMobileCategoriesOpen(!isMobileCategoriesOpen)}
-                className="flex items-center justify-between px-4 py-2 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between px-4 py-2 rounded-lg text-base font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <span>Categories</span>
                 <svg
@@ -208,7 +208,7 @@ export const PreLoginHeader: React.FC = () => {
                           setIsMobileMenuOpen(false)
                           setIsMobileCategoriesOpen(false)
                         }}
-                        className="px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        className="px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         {category}
                       </ProtectedLink>
@@ -220,7 +220,7 @@ export const PreLoginHeader: React.FC = () => {
               <ProtectedLink
                 href="/browse?sort=trending"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-2 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 rounded-lg text-base font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 Trending
               </ProtectedLink>
@@ -241,7 +241,7 @@ export const PreLoginHeader: React.FC = () => {
                   <Link
                     href="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-4 py-2 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
+                    className="px-4 py-2 rounded-lg text-base font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     Profile
                   </Link>
@@ -251,7 +251,7 @@ export const PreLoginHeader: React.FC = () => {
                   <Link
                     href="/login"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-4 py-2 rounded-lg text-base font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+                    className="px-4 py-2 rounded-lg text-base font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors"
                   >
                     Log In
                   </Link>

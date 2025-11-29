@@ -10,8 +10,8 @@ export const Card: React.FC<CardProps> = ({ className, children, hover, ...props
   return (
     <div
       className={cn(
-        'bg-white rounded-lg border border-[#DCDCDC] shadow-sm',
-        hover && 'hover:shadow-md transition-shadow cursor-pointer',
+        'bg-white dark:bg-gray-800 rounded-lg border border-[#DCDCDC] dark:border-gray-700 shadow-sm',
+        hover && 'hover:shadow-md dark:hover:shadow-lg transition-shadow cursor-pointer',
         className
       )}
       {...props}
@@ -27,7 +27,7 @@ export const CardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={cn('p-4 border-b border-gray-200', className)} {...props}>
+    <div className={cn('p-4 border-b border-gray-200 dark:border-gray-700', className)} {...props}>
       {children}
     </div>
   )
@@ -51,7 +51,7 @@ export const CardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={cn('p-4 border-t border-gray-200', className)} {...props}>
+    <div className={cn('p-4 border-t border-gray-200 dark:border-gray-700', className)} {...props}>
       {children}
     </div>
   )

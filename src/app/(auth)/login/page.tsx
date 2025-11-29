@@ -61,7 +61,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex w-full max-w-[1440px] mx-auto">
       {/* Left Side - Artwork */}
-      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden bg-gray-50">
+      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden bg-gray-50 dark:bg-gray-900 transition-colors">
         <div className="absolute inset-0 flex items-center justify-center">
           <Image
             src="/images/login.png"
@@ -80,14 +80,14 @@ export default function LoginPage() {
         {/* Logo - Top Center of Right Side */}
         <div className="flex justify-center pt-12 lg:pt-20">
           <div className="flex items-center space-x-2">
-            <span className="text-base font-semibold text-gray-900">ClaimStack</span>
+            <span className="text-base font-semibold text-gray-900 dark:text-gray-100">ClaimStack</span>
           </div>
         </div>
 
         <div className="flex-1 flex items-center justify-center py-4 sm:py-8">
           <div className="w-full max-w-md">
             <div className="mb-6 sm:mb-8">
-              <h1 className="text-2xl font-semibold text-gray-900 text-center">Log In</h1>
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 text-center">Log In</h1>
             </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -117,10 +117,10 @@ export default function LoginPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or</span>
+                <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -133,8 +133,8 @@ export default function LoginPage() {
                 <span>Sign In With Google</span>
               </Button>
             </div>
-            {errors.general && (
-              <div className="text-center text-sm text-red-600">
+                {errors.general && (
+              <div className="text-center text-sm text-red-600 dark:text-red-400">
                 {errors.general}
               </div>
             )}
@@ -148,7 +148,7 @@ export default function LoginPage() {
               <div>
                 Forgot password?
               </div>
-              <Link href="/forgot-password" className="text-blue-600 hover:text-blue-700">
+              <Link href="/forgot-password" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                 Restore
               </Link>
             </div>

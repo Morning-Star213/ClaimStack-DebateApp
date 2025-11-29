@@ -156,7 +156,7 @@ export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
         showCharCount
         />
 
-        <label className="block text-sm font-medium text-[#666666] mb-2">
+        <label className="block text-sm font-medium text-[#666666] dark:text-gray-400 mb-2">
           Evidence Type
         </label>
         <Dropdown
@@ -179,12 +179,12 @@ export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
         />
       ) : (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Upload File
           </label>
           <div className={cn(
-            'bg-gray-50 rounded-2xl p-4 border',
-            error ? 'border-red-500' : 'border-gray-300'
+            'bg-gray-50 dark:bg-gray-800 rounded-2xl p-4 border',
+            error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'
           )}>
             <input
               ref={fileInputRef}
@@ -196,20 +196,20 @@ export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
             <Button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full bg-white rounded-full px-4 py-2 flex items-center justify-center gap-2 text-gray-900 font-medium hover:bg-gray-50 transition-colors border border-gray-200"
+              className="w-full bg-white dark:bg-gray-700 rounded-full px-4 py-2 flex items-center justify-center gap-2 text-gray-900 dark:text-gray-100 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors border border-gray-200 dark:border-gray-600"
             >
               <span>Upload File</span>
               <ArrowUpIcon className="w-5 h-5" />
             </Button>
             
-            <div className="border-t border-gray-200 my-4"></div>
+            <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
             
             {file && !error && (
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
                   <CheckIcon className="w-4 h-4 text-white" />
                 </div>
-                <p className="text-sm text-gray-900">
+                <p className="text-sm text-gray-900 dark:text-gray-100">
                   {file.name} ({(file.size / 1024 / 1024).toFixed(1)}MB)
                 </p>
               </div>
@@ -220,18 +220,18 @@ export const EvidenceUpload: React.FC<EvidenceUploadProps> = ({
                 <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs font-bold">!</span>
                 </div>
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
               </div>
             )}
             
             <div className="flex justify-between text-xs">
               <span>
-                <span className="font-semibold text-gray-900">Accepted formats:</span>{' '}
-                <span className="text-gray-500">{acceptedFormats.map(f => `.${f}`).join(', ')}</span>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Accepted formats:</span>{' '}
+                <span className="text-gray-500 dark:text-gray-400">{acceptedFormats.map(f => `.${f}`).join(', ')}</span>
               </span>
               <span>
-                <span className="font-semibold text-gray-900">Max size:</span>{' '}
-                <span className="text-gray-500">25 MB</span>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">Max size:</span>{' '}
+                <span className="text-gray-500 dark:text-gray-400">25 MB</span>
               </span>
             </div>
           </div>

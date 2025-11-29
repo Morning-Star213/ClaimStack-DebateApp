@@ -44,21 +44,21 @@ export const PopularClaimsCarousel: React.FC<PopularClaimsCarouselProps> = ({
 
   return (
     <div className={className}>
-      <h2 className="text-lg sm:text-xl sm:pb-4 font-semibold text-gray-900 mb-4">
+      <h2 className="text-lg sm:text-xl sm:pb-4 font-semibold text-gray-900 dark:text-gray-100 mb-4">
         Popular Claims
       </h2>
       <div className='flex flex-col gap-4'>
         {isLoading ? (
-          <p className='text-gray-600'>Loading...</p>
+          <p className='text-gray-600 dark:text-gray-400'>Loading...</p>
         ) : popularClaims.length === 0 ? (
-          <p className='text-gray-600'>No popular claims found.</p>
+          <p className='text-gray-600 dark:text-gray-400'>No popular claims found.</p>
         ) : (
           <>
             {popularClaims.map((claim) => (
               <Link
                 key={claim.id}
                 href={`/claims/${claim.id}`}
-                className='text-blue-600 hover:text-blue-800 hover:underline cursor-pointer block truncate'
+                className='text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer block truncate'
               >
                 {claim.title}
               </Link>

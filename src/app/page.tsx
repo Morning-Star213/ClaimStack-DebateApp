@@ -38,22 +38,29 @@ export default function HomePage() {
   const hasMoreClaims = claims.length > displayCount
 
   return (
-    <div className="bg-gray-50 relative">
+    <div className="bg-gray-50 dark:bg-gray-900 relative transition-colors">
       <div 
-        className="absolute top-0 left-0 right-0 pointer-events-none"
+        className="absolute top-0 left-0 right-0 pointer-events-none dark:hidden"
         style={{
           height: 'min(1109px, 100vh)',
           background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
+        }}
+      />
+      <div 
+        className="absolute top-0 left-0 right-0 pointer-events-none hidden dark:block"
+        style={{
+          height: 'min(1109px, 100vh)',
+          background: 'linear-gradient(to bottom, rgba(17, 24, 39, 0.3), rgba(17, 24, 39, 0))',
         }}
       />
       {/* Hero Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[64px] max-w-4xl mx-auto font-bold text-gray-900 mb-3 sm:mb-4 leading-tight sm:leading-[1.5] px-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[64px] max-w-4xl mx-auto font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 leading-tight sm:leading-[1.5] px-2">
               Shape the Arguments That Shape the World
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 px-4">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 px-4">
               Fight back against misinformation. Push truth to the top
             </p>
             <Button variant="primary" size="base" className="border border-blue-300 border-solid rounded-full px-6 sm:px-10" asChild>
@@ -67,8 +74,8 @@ export default function HomePage() {
       <section className="pb-8 sm:pb-12 lg:pb-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">How ClaimStack Works</h2>
-            <p className="text-base sm:text-lg md:text-xl font-medium text-gray-600 pb-4 sm:pb-[20px] px-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4">How ClaimStack Works</h2>
+            <p className="text-base sm:text-lg md:text-xl font-medium text-gray-600 dark:text-gray-300 pb-4 sm:pb-[20px] px-4">
               Choose a side, stack the evidence, and let the best argument win.
             </p>
           </div>
@@ -85,12 +92,12 @@ export default function HomePage() {
               />
             </div>
             <div className="order-1 md:order-2 px-2 sm:px-0">
-              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 leading-relaxed mb-4">
+              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                 In the sea of online debates, valuable arguments often get lost or go unheard.
                 ClaimStack simplifies these discussions, bringing both sides of any topic into
                 focus.
               </p>
-              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 leading-relaxed mb-4">
+              <p className="text-base sm:text-lg md:text-xl font-normal text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                 Upload link, or share evidence from videos and articles to social media posts.
                 Vote on the evidence that makes the strongest case. The best arguments rise to the
                 top, and our AI synthesizes them into clear, unbiased summaries you can trust.
@@ -103,7 +110,7 @@ export default function HomePage() {
       {/* Claim Feed Section */}
       <section className="py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6">Trending</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">Trending</h2>
           <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 mb-6 sm:mb-8 pt-3 sm:pt-5 flex-wrap">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap">
               <Button
@@ -112,8 +119,8 @@ export default function HomePage() {
                 onClick={() => setActiveButton('sort')}
                 className={`flex round-full items-center space-x-2 text-xs sm:text-sm px-3 sm:px-4 ${
                   activeButton === 'sort'
-                    ? '!border-blue-600 !text-blue-600 bg-blue-50'
-                    : '!border-gray-300 bg-gray-100 !text-gray-700'
+                    ? '!border-blue-600 dark:!border-blue-500 !text-blue-600 dark:!text-blue-400 bg-blue-50 dark:bg-blue-900'
+                    : '!border-gray-300 dark:!border-gray-600 bg-gray-100 dark:bg-gray-800 !text-gray-700 dark:!text-gray-300'
                 }`}
               >
                 <SortAscIcon className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -125,8 +132,8 @@ export default function HomePage() {
                 onClick={() => setActiveButton('recent')}
                 className={`round-full text-xs sm:text-sm px-3 sm:px-4 ${
                   activeButton === 'recent'
-                    ? '!border-blue-600 !text-blue-600 bg-blue-50 font-medium'
-                    : '!border-gray-300 bg-gray-100 !text-gray-700'
+                    ? '!border-blue-600 dark:!border-blue-500 !text-blue-600 dark:!text-blue-400 bg-blue-50 dark:bg-blue-900 font-medium'
+                    : '!border-gray-300 dark:!border-gray-600 bg-gray-100 dark:bg-gray-800 !text-gray-700 dark:!text-gray-300'
                 }`}
               >
                 Recent
@@ -134,25 +141,25 @@ export default function HomePage() {
             </div>
             <FilterButton
               onFiltersChange={handleFiltersChange}
-              buttonClassName="!border-gray-300 bg-gray-100 !text-gray-700 text-xs sm:text-sm px-3 sm:px-4"
+              buttonClassName="!border-gray-300 dark:!border-gray-600 bg-gray-100 dark:bg-gray-800 !text-gray-700 dark:!text-gray-300 text-xs sm:text-sm px-3 sm:px-4"
               iconSize="w-3 h-3 sm:w-4 sm:h-4"
             />
           </div>
           {isLoading && (
             <div className="text-center py-8">
-              <p className="text-gray-600">Loading approved claims...</p>
+              <p className="text-gray-600 dark:text-gray-400">Loading approved claims...</p>
             </div>
           )}
 
           {error && error !== 'Unauthorized' && (
             <div className="text-center py-8">
-              <p className="text-red-600">Error: {error}</p>
+              <p className="text-red-600 dark:text-red-400">Error: {error}</p>
             </div>
           )}
 
           {!isLoading && (!error || error === 'Unauthorized') && displayedClaims.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-600">No approved claims found.</p>
+              <p className="text-gray-600 dark:text-gray-400">No approved claims found.</p>
             </div>
           )}
 

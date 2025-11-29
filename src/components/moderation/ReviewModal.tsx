@@ -103,32 +103,32 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 py-6">
         {/* Left Section: Claim Content */}
         <div className="space-y-5">
-          <h2 className="text-xl font-semibold text-[#030303] mb-5">Claim Content</h2>
+          <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-5">Claim Content</h2>
           
           <div className="space-y-4">
-            <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
               <span>{item.user}</span>
               <span>{item.date}</span>
             </div>
             
-            <h3 className="text-xl font-semibold text-blue-600 leading-tight">
+            <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400 leading-tight">
               {item.title}
             </h3>
             {item.description && (
-              <div className="text-sm text-gray-700 leading-relaxed">
+              <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 {item.description}
               </div>
             )}
             
             <div className="space-y-3 pt-2">
-              <div className="flex items-center space-x-2 text-sm text-gray-700">
-                <FlagIcon className="w-4 h-4 text-gray-600" />
-                <span>Flagged by: <strong className="text-[#030303]">{item.flaggedBy} users</strong></span>
+              <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                <FlagIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                <span>Flagged by: <strong className="text-[#030303] dark:text-gray-100">{item.flaggedBy} users</strong></span>
               </div>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-700">
-                <QuestionMarkIcon className="w-4 h-4 text-gray-600" />
-                <span>Reasons: <strong className="text-[#030303]">{item.reason}</strong></span>
+              <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                <QuestionMarkIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                <span>Reasons: <strong className="text-[#030303] dark:text-gray-100">{item.reason}</strong></span>
               </div>
             </div>
             
@@ -146,49 +146,49 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         </div>
         
         {/* Right Section: Metadata */}
-        <div className="space-y-5 border-l border-gray-200 pl-8">
-          <h2 className="text-xl font-semibold text-[#030303] mb-5">Metadata</h2>
+        <div className="space-y-5 border-l border-gray-200 dark:border-gray-700 pl-8">
+          <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-5">Metadata</h2>
           
           <div className="space-y-4 text-sm">
             <div>
-              <span className="text-gray-600">Claim ID:</span>
-              <span className="ml-2 font-medium text-[#030303]">{item.claimId || 'N/A'}</span>
+              <span className="text-gray-600 dark:text-gray-400">Claim ID:</span>
+              <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{item.claimId || 'N/A'}</span>
             </div>
             
             <div>
-              <span className="text-gray-600">Submitted:</span>
-              <span className="ml-2 font-medium text-[#030303]">{item.submittedDate || 'N/A'}</span>
+              <span className="text-gray-600 dark:text-gray-400">Submitted:</span>
+              <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{item.submittedDate || 'N/A'}</span>
             </div>
             
             <div>
-              <span className="text-gray-600 block mb-2">AI Summary:</span>
+              <span className="text-gray-600 dark:text-gray-400 block mb-2">AI Summary:</span>
               {item.forSummary ? (
-                <p className="text-sm text-[#030303]">{item.forSummary}</p>
+                <p className="text-sm text-[#030303] dark:text-gray-200">{item.forSummary}</p>
               ) : (
-                <p className="text-sm text-gray-500 italic">No AI summary available</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 italic">No AI summary available</p>
               )}
             </div>
             
             <div>
-              <span className="text-gray-600">User Strike History:</span>
-              <span className="ml-2 font-medium text-[#030303]">{item.userStrikeHistory || 'No prior violations'}</span>
+              <span className="text-gray-600 dark:text-gray-400">User Strike History:</span>
+              <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{item.userStrikeHistory || 'No prior violations'}</span>
             </div>
             
             <div>
-              <span className="text-gray-600">Total Votes:</span>
+              <span className="text-gray-600 dark:text-gray-400">Total Votes:</span>
               <span className="ml-2">
-                <span className="font-medium text-blue-600">{item.votesFor || 0} For</span>
-                <span className="mx-2 text-gray-400">/</span>
-                <span className="font-medium text-red-600">{item.votesAgainst || 0} Against</span>
+                <span className="font-medium text-blue-600 dark:text-blue-400">{item.votesFor || 0} For</span>
+                <span className="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <span className="font-medium text-red-600 dark:text-red-400">{item.votesAgainst || 0} Against</span>
               </span>
             </div>
             
             {item.flagTimestamps && item.flagTimestamps.length > 0 && (
               <div>
-                <span className="text-gray-600 block mb-2">Flag Timestamps:</span>
+                <span className="text-gray-600 dark:text-gray-400 block mb-2">Flag Timestamps:</span>
                 <ul className="space-y-1 ml-4">
                   {item.flagTimestamps.map((flag, index) => (
-                    <li key={index} className="text-[#030303]">
+                    <li key={index} className="text-[#030303] dark:text-gray-200">
                       - {flag.date} ({flag.user})
                     </li>
                   ))}
@@ -198,7 +198,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
           </div>
           
           {/* Action Buttons */}
-          <div className="flex flex-col space-y-3 pt-6 mt-6 border-t border-gray-200">
+          <div className="flex flex-col space-y-3 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
             <Button
               variant="primary"
               size="baseFull"

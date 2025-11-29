@@ -136,9 +136,9 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   // Determine card type for display
   const cardType = isEvidenceItem ? 'Evidence' : isPerspectiveItem ? 'Perspective' : ''
   const cardTypeColor = isEvidenceItem 
-    ? 'bg-blue-100 text-blue-700' 
+    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
     : isPerspectiveItem 
-    ? 'bg-purple-100 text-purple-700' 
+    ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300' 
     : ''
 
   // For claims, use the provided href or default to /claims/{id}
@@ -206,7 +206,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       
       <div className="flex items-start justify-between mb-2 sm:mb-3">
         <div className="flex items-center space-x-2">
-          <span className="text-xs sm:text-sm text-[#030303] font-medium">@{user?.username || 'user'}</span>
+          <span className="text-xs sm:text-sm text-[#030303] dark:text-gray-100 font-medium">@{user?.username || 'user'}</span>
         </div>
         <div className='flex items-center space-x-2'>
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${cardTypeColor}`}>
@@ -219,7 +219,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
                 e.stopPropagation()
                 setShowDeleteModal(true)
               }}
-              className="text-red-500 hover:text-red-700 transition-colors p-1"
+              className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors p-1"
               title="Delete post"
             >
               <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -234,12 +234,12 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       {title && (
         titleHref ? (
           <ProtectedLink href={titleHref}>
-            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 hover:text-blue-700 mb-2 leading-tight cursor-pointer">
+            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-2 leading-tight cursor-pointer">
               {title}
             </h3>
           </ProtectedLink>
         ) : (
-          <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 hover:text-blue-700 mb-2 leading-tight">
+          <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-2 leading-tight">
             {title}
           </h3>
         )
@@ -250,14 +250,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           <div className="relative">
             <p 
               ref={descriptionRef}
-              className={`text-gray-600 text-xs sm:text-sm font-normal leading-relaxed ${!isDescriptionExpanded ? 'line-clamp-2 pr-14' : ''}`}
+              className={`text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-normal leading-relaxed ${!isDescriptionExpanded ? 'line-clamp-2 pr-14' : ''}`}
             >
               {description}
               {isDescriptionExpanded && (
                 <span className="ml-1">
                   <button
                     onClick={() => setIsDescriptionExpanded(false)}
-                    className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium transition-colors"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs sm:text-sm font-medium transition-colors"
                   >
                     read less
                   </button>
@@ -266,7 +266,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             </p>
             {!isDescriptionExpanded && showReadMore && (
               <>
-                <div className="absolute bottom-0 right-0 h-6 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+                <div className="absolute bottom-0 right-0 h-6 w-20 bg-gradient-to-l from-white dark:from-gray-800 to-transparent pointer-events-none"></div>
                 <button
                   onClick={() => setIsDescriptionExpanded(true)}
                   className="absolute bottom-0 right-0 text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium transition-colors pl-1"
@@ -280,16 +280,16 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       )}
 
       {user && (
-        <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+        <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
           <UserIcon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
           <span className="flex flex-row items-center gap-1 sm:gap-2 flex-wrap">
-            <div className="text-xs sm:text-sm text-[#030303] font-medium">Author:</div> 
-            <span>{user.firstName} {user.lastName}</span>
+            <div className="text-xs sm:text-sm text-[#030303] dark:text-gray-200 font-medium">Author:</div> 
+            <span className="dark:text-gray-300">{user.firstName} {user.lastName}</span>
           </span>
         </div>
       )}
 
-      <div className="border-t border-gray-200 pt-3 sm:pt-4 mt-3 sm:mt-4">
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-3 sm:pt-4 mt-3 sm:mt-4">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           <Button
             variant="primary"
@@ -354,7 +354,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           }
         >
           <div className="py-4">
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-gray-300">
               Are you sure you want to delete this post? This action cannot be undone.
             </p>
           </div>

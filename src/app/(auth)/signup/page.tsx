@@ -69,7 +69,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex w-full max-w-[1440px] mx-auto">
       {/* Left Side - Artwork */}
-      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden bg-gray-50">
+      <div className="hidden lg:block lg:w-2/3 relative overflow-hidden bg-gray-50 dark:bg-gray-900 transition-colors">
         <div className="absolute inset-0 flex items-center justify-center">
           <Image
             src="/images/login.png"
@@ -88,14 +88,14 @@ export default function SignupPage() {
         {/* Logo - Top Center of Right Side */}
         <div className="flex justify-center pt-6 sm:pt-10 lg:pt-14">
           <div className="flex items-center space-x-2">
-            <span className="text-sm sm:text-base font-semibold text-gray-900">ClaimStack</span>
+            <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">ClaimStack</span>
           </div>
         </div>
 
         <div className="flex-1 flex items-center justify-center py-4 sm:py-8">
           <div className="w-full max-w-md">
             <div className="mb-6 sm:mb-8">
-              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 text-center">Sign Up</h1>
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 text-center">Sign Up</h1>
             </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
@@ -161,10 +161,10 @@ export default function SignupPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or</span>
+                <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -188,15 +188,15 @@ export default function SignupPage() {
                     setFormData({ ...formData, agreeToTerms: e.target.checked })
                     setErrors({ ...errors, agreeToTerms: '' })
                   }}
-                  className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded flex-shrink-0"
+                  className="mt-1 h-4 w-4 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded flex-shrink-0"
                 />
-                <label htmlFor="agreeToTerms" className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                <label htmlFor="agreeToTerms" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   I agree to the{' '}
-                  <Link href="/terms" className="text-blue-600 hover:text-blue-700">
+                  <Link href="/terms" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                     Terms
                   </Link>{' '}
                   and{' '}
-                  <Link href="/privacy" className="text-blue-600 hover:text-blue-700">
+                  <Link href="/privacy" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                     Privacy Policy
                   </Link>
                 </label>
@@ -204,11 +204,11 @@ export default function SignupPage() {
             </div>
             {errors.agreeToTerms && (
               <div className="flex justify-center">
-                <p className="w-full text-sm text-red-600">{errors.agreeToTerms}</p>
+                <p className="w-full text-sm text-red-600 dark:text-red-400">{errors.agreeToTerms}</p>
               </div>
             )}
             {errors.general && (
-              <div className="text-center text-sm text-red-600">
+              <div className="text-center text-sm text-red-600 dark:text-red-400">
                 {errors.general}
               </div>
             )}
