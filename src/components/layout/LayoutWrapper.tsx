@@ -28,10 +28,18 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
         {shouldShowPreLoginHeader ? <PreLoginHeader />  : <Header />}
         {isHomePage ?       
         <div 
-          className="absolute top-0 left-0 right-0 pointer-events-none"
+          className="absolute top-0 left-0 right-0 pointer-events-none dark:hidden"
           style={{
             height: 'min(1109px, 100vh)',
             background: 'linear-gradient(to bottom,#eef4ff, rgba(16, 102, 222, 0))',
+          }}
+        />  : <></>}
+        {isHomePage ?       
+        <div 
+          className="absolute top-0 left-0 right-0 pointer-events-none hidden dark:block"
+          style={{
+            height: 'min(1109px, 100vh)',
+            background: 'linear-gradient(to bottom, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0))',
           }}
         />  : <></>}
         

@@ -65,14 +65,14 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
     >
       <div className="flex flex-row py-5">
         {/* Left Section - Use this action if */}
-        <div className="flex flex-col flex-1 pr-6 border-r border-gray-200">
+        <div className="flex flex-col flex-1 pr-6 border-r border-gray-200 dark:border-gray-700">
           <div className="flex flex-col font-semibold text-2xl items-center justify-center pb-4">
-            Are You Sure You Want To{' '}
-            <div>Reject This Content?</div>
+            <span className="text-gray-900 dark:text-gray-100">Are You Sure You Want To</span>
+            <div className="text-gray-900 dark:text-gray-100">Reject This Content?</div>
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-gray-900">Use this action if:</h3>
-            <ul className="space-y-1 text-sm text-gray-700 bg-slate-100 rounded-2xl p-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Use this action if:</h3>
+            <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 bg-slate-100 dark:bg-gray-800 rounded-2xl p-4">
             <li className="flex items-start">
                 <span className="mr-2">•</span>
                 <span>The content may violate local/international law</span>
@@ -93,15 +93,15 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
           </div>
           <div className="pt-4">
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold items-center text-gray-900">Who should review this?</h3>
+              <h3 className="text-lg font-semibold items-center text-gray-900 dark:text-gray-100">Who should review this?</h3>
               <div className="space-y-2">
               <button
                   type="button"
                   onClick={() => setSelectedReviewer('legal')}
                   className={`w-full px-4 py-2 rounded-full border-2 text-left transition-colors ${
                   selectedReviewer === 'legal'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                      ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
               >
                   Legal Team
@@ -111,8 +111,8 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
                   onClick={() => setSelectedReviewer('admin')}
                   className={`w-full px-4 py-2 rounded-full border-2 text-left transition-colors ${
                   selectedReviewer === 'admin'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                      ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
               >
                   System Administrator
@@ -122,8 +122,8 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
                   onClick={() => setSelectedReviewer('policy')}
                   className={`w-full px-4 py-2 rounded-full border-2 text-left transition-colors ${
                   selectedReviewer === 'policy'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                      ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
               >
                   Content Policy Lead
@@ -136,37 +136,37 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
         <div className="flex flex-col flex-1 pl-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="block text-gray-700 font-medium text-sm">
+              <label className="block text-gray-700 dark:text-gray-300 font-medium text-sm">
                 Reason for escalation (required):
               </label>
               <textarea
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                 rows={3}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-gray-700 font-medium text-sm">
-                Attach internal notes or links <span className="text-gray-500">(optional)</span>:
+              <label className="block text-gray-700 dark:text-gray-300 font-medium text-sm">
+                Attach internal notes or links <span className="text-gray-500 dark:text-gray-400">(optional)</span>:
               </label>
               <input
                 value={internalNotes}
                 onChange={(e) => setInternalNotes(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                 placeholder="Enter internal notes or links"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Upload File
               </label>
               <div className={cn(
-                'bg-gray-50 rounded-2xl p-4 border',
-                fileError ? 'border-red-500' : 'border-gray-300'
+                'bg-gray-50 dark:bg-gray-800 rounded-2xl p-4 border',
+                fileError ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'
               )}>
                 <input
                   ref={fileInputRef}
@@ -178,20 +178,20 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
                 <Button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full bg-white rounded-full px-4 py-2 flex items-center justify-center gap-2 text-gray-900 font-medium hover:bg-gray-50 transition-colors border border-gray-200"
+                  className="w-full bg-white dark:bg-gray-700 rounded-full px-4 py-2 flex items-center justify-center gap-2 text-gray-900 dark:text-gray-100 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors border border-gray-200 dark:border-gray-600"
                 >
                   <span>Upload File</span>
                   <ArrowUpIcon className="w-5 h-5" />
                 </Button>
                 
-                <div className="border-t border-gray-200 my-4"></div>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
                 
                 {file && !fileError && (
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
                       <CheckIcon className="w-4 h-4 text-white" />
                     </div>
-                    <p className="text-sm text-gray-900">
+                    <p className="text-sm text-gray-900 dark:text-gray-100">
                       {file.name} ({(file.size / 1024 / 1024).toFixed(1)}MB)
                     </p>
                   </div>
@@ -202,18 +202,18 @@ export const EscalateModal: React.FC<EscalateModalProps> = ({
                     <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
                       <span className="text-white text-xs font-bold">!</span>
                     </div>
-                    <p className="text-sm text-red-600">{fileError}</p>
+                    <p className="text-sm text-red-600 dark:text-red-400">{fileError}</p>
                   </div>
                 )}
                 
                 <div className="flex justify-between text-xs">
                   <span>
-                    <span className="font-semibold text-gray-900">Accepted formats:</span>{' '}
-                    <span className="text-gray-500">{acceptedFormats.map(f => `.${f}`).join(', ')}</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">Accepted formats:</span>{' '}
+                    <span className="text-gray-500 dark:text-gray-400">{acceptedFormats.map(f => `.${f}`).join(', ')}</span>
                   </span>
                   <span>
-                    <span className="font-semibold text-gray-900">Max size:</span>{' '}
-                    <span className="text-gray-500">25 MB</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">Max size:</span>{' '}
+                    <span className="text-gray-500 dark:text-gray-400">25 MB</span>
                   </span>
                 </div>
               </div>

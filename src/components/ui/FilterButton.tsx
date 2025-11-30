@@ -54,14 +54,14 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
       <button
         onClick={() => setIsFilterOpen(!isFilterOpen)}
         className={cn(
-          'flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors',
+          'flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors',
           buttonClassName
         )}
       >
-        <FilterIcon className={iconSize} />
-        <span className={textSize}>Filters</span>
+        <FilterIcon className={cn(iconSize, 'text-gray-700 dark:text-gray-300')} />
+        <span className={cn(textSize, 'text-gray-700 dark:text-gray-300')}>Filters</span>
         {activeFilterCount > 0 && (
-          <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="bg-black dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded-full w-5 h-5 flex items-center justify-center">
             {activeFilterCount}
           </span>
         )}

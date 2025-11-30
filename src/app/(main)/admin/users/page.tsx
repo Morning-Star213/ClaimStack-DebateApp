@@ -121,8 +121,8 @@ export default function UserManagementPage() {
   // Don't render if still loading or user is not admin
   if (authLoading) {
     return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center transition-colors">
+        <p className="text-gray-600 dark:text-gray-400">Loading...</p>
       </div>
     )
   }
@@ -259,21 +259,21 @@ export default function UserManagementPage() {
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'ADMIN':
-        return 'bg-red-100 text-red-800'
+        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300'
       case 'MODERATOR':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300'
       case 'USER':
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
     }
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-8 gap-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-[46px] font-semibold text-[#030303]">
+          <h1 className="text-2xl sm:text-3xl lg:text-[46px] font-semibold text-[#030303] dark:text-gray-100">
             User Management Panel
           </h1>
         </div>
@@ -282,7 +282,7 @@ export default function UserManagementPage() {
         <div className="mb-6 flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <SearchIcon className="w-5 h-5 text-gray-400" />
+              <SearchIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             </div>
             <input
               type="text"
@@ -292,7 +292,7 @@ export default function UserManagementPage() {
                 setSearchQuery(e.target.value)
                 setPage(1)
               }}
-              className="w-full pl-12 pr-4 py-2 sm:py-3 bg-gray-100 border border-gray-200 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-2 sm:py-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             />
           </div>
           <div className="w-full sm:w-48">
@@ -315,48 +315,48 @@ export default function UserManagementPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600">{error}</p>
+          <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <p className="text-red-600 dark:text-red-400">{error}</p>
           </div>
         )}
 
         {/* Loading State */}
         {isLoading && (
           <div className="text-center py-8">
-            <p className="text-gray-600">Loading users...</p>
+            <p className="text-gray-600 dark:text-gray-400">Loading users...</p>
           </div>
         )}
 
         {/* Users Table */}
         {!isLoading && (
           <>
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
               Showing {users.length} of {total} users
             </div>
             <Card className="p-4 sm:p-6 rounded-lg sm:rounded-[32px] overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">User</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Email</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Role</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Joined</th>
-                    <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Actions</th>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">User</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Email</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Role</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Joined</th>
+                    <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-8 text-gray-500">
+                      <td colSpan={5} className="text-center py-8 text-gray-500 dark:text-gray-400">
                         No users found
                       </td>
                     </tr>
                   ) : (
                     users.map((user) => (
-                      <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full border border-blue-500 flex items-center justify-center overflow-hidden bg-gray-100">
+                            <div className="w-10 h-10 rounded-full border border-blue-500 dark:border-blue-400 flex items-center justify-center overflow-hidden bg-gray-100 dark:bg-gray-700">
                               {user.avatarUrl ? (
                                 <img
                                   src={user.avatarUrl}
@@ -364,22 +364,22 @@ export default function UserManagementPage() {
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <span className="text-sm font-medium text-gray-600">
+                                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                                   {user.username.charAt(0).toUpperCase()}
                                 </span>
                               )}
                             </div>
                             <div>
-                              <div className="font-medium text-gray-900">@{user.username}</div>
+                              <div className="font-medium text-gray-900 dark:text-gray-100">@{user.username}</div>
                               {(user.firstName || user.lastName) && (
-                                <div className="text-sm text-gray-500">
+                                <div className="text-sm text-gray-500 dark:text-gray-400">
                                   {user.firstName} {user.lastName}
                                 </div>
                               )}
                             </div>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-700">{user.email}</td>
+                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{user.email}</td>
                         <td className="py-3 px-4">
                           <span
                             className={`px-2 py-1 text-xs font-medium rounded-full ${getRoleBadgeColor(
@@ -389,7 +389,7 @@ export default function UserManagementPage() {
                             {user.role}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-600">{formatDate(user.createdAt)}</td>
+                        <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">{formatDate(user.createdAt)}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-end gap-2">
                             <Button
@@ -437,7 +437,7 @@ export default function UserManagementPage() {
                 >
                   Previous
                 </Button>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
                   Page {page} of {totalPages}
                 </span>
                 <Button
@@ -465,8 +465,8 @@ export default function UserManagementPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-700">
-            Are you sure you want to delete user <strong>@{selectedUser?.username}</strong>? This action cannot be undone.
+          <p className="text-gray-700 dark:text-gray-300">
+            Are you sure you want to delete user <strong className="dark:text-gray-100">@{selectedUser?.username}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-3">
             <Button
@@ -498,8 +498,8 @@ export default function UserManagementPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-700">
-            Change role for user <strong>@{selectedUser?.username}</strong>
+          <p className="text-gray-700 dark:text-gray-300">
+            Change role for user <strong className="dark:text-gray-100">@{selectedUser?.username}</strong>
           </p>
           <Dropdown
             options={[
@@ -543,8 +543,8 @@ export default function UserManagementPage() {
         size="lg"
       >
         <div className="space-y-4">
-          <p className="text-gray-700">
-            Set a new password for user <strong>@{selectedUser?.username}</strong>
+          <p className="text-gray-700 dark:text-gray-300">
+            Set a new password for user <strong className="dark:text-gray-100">@{selectedUser?.username}</strong>
           </p>
           <Input
             type="password"

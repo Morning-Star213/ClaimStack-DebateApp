@@ -91,51 +91,51 @@ export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) =
       case 'new_comment':
         // Speech bubble with 'i' inside
         return (
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center relative">
-            <ChatIcon className="w-5 h-5 text-blue-600" />
-            <span className="absolute text-[10px] font-bold text-blue-600 leading-none">i</span>
+          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center relative">
+            <ChatIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span className="absolute text-[10px] font-bold text-blue-600 dark:text-blue-400 leading-none">i</span>
           </div>
         )
       case 'new_evidence':
         // Paperclip icon
         return (
-          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-            <PaperClipIcon className="w-5 h-5 text-gray-600" />
+          <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <PaperClipIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </div>
         )
       case 'new_follower':
         // Person's head with '@' symbol
         return (
-          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center relative">
-            <UserIcon className="w-5 h-5 text-gray-600" />
-            <span className="absolute text-[10px] font-bold text-gray-600 leading-none">@</span>
+          <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center relative">
+            <UserIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            <span className="absolute text-[10px] font-bold text-gray-600 dark:text-gray-300 leading-none">@</span>
           </div>
         )
       case 'vote_received':
         // Line graph with upward trend
         return (
-          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-            <TrendingUpIcon className="w-5 h-5 text-green-600" />
+          <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+            <TrendingUpIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
         )
       case 'evidence_rejected':
         // Clock/hourglass icon
         return (
-          <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-            <ClockIcon className="w-5 h-5 text-yellow-600" />
+          <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+            <ClockIcon className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
           </div>
         )
       case 'evidence_approved':
         // Starburst/sparkle icon
         return (
-          <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-            <SparklesIcon className="w-5 h-5 text-purple-600" />
+          <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+            <SparklesIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
         )
       default:
         return (
-          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-            <BellOutlineIcon className="w-5 h-5 text-gray-600" />
+          <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <BellOutlineIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </div>
         )
     }
@@ -176,10 +176,10 @@ export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) =
   return (
     <div className="flex flex-col">
       <div className="p-4 flex items-center justify-between flex-shrink-0">
-        <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notifications</h3>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600"
+          className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           aria-label="Close"
         >
           <XIcon className="w-5 h-5" />
@@ -188,7 +188,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) =
 
       <div className="overflow-y-auto">
         {notifications.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             <p>No notifications</p>
           </div>
         ) : (
@@ -197,10 +197,10 @@ export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) =
               <div key={dateGroup} className={groupIndex > 0 ? "mt-4" : ""}>
                 <div className="relative px-4 py-3">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-[324px] border-t border-gray-300" />
+                    <div className="w-[324px] border-t border-gray-300 dark:border-gray-700" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">{dateGroup}</span>
+                    <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{dateGroup}</span>
                   </div>
                 </div>
                 <div className="space-y-2 px-4 pb-4">
@@ -209,16 +209,16 @@ export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) =
                       key={notification.id}
                       href={notification.link || '#'}
                       onClick={onClose}
-                      className="block p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                      className="block p-4 rounded-2xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
                       <div className="flex items-start space-x-3">
                         <div className="flex-shrink-0 relative">
                           {getNotificationIcon(notification.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900">{notification.title}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{notification.title}</p>
                           {notification.message && (
-                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{notification.message}</p>
                           )}
                         </div>
                       </div>

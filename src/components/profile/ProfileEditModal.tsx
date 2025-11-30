@@ -246,7 +246,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
       <div className="flex flex-col gap-6">
         {/* Success Message */}
         {success && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
+          <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200 text-sm">
             {success}
           </div>
         )}
@@ -254,7 +254,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
         {/* Profile Section */}
         <form onSubmit={handleSubmit} className="space-y-4 w-1/2">
-          <h3 className="text-lg font-semibold text-gray-900">Profile Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Profile Information</h3>
 
           {/* Avatar Upload */}
           <div className="flex flex-col items-center space-y-2">
@@ -283,12 +283,12 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
               onChange={handleAvatarChange}
               className="hidden"
             />
-            <p className="text-xs text-gray-500">Click avatar to upload (max 5MB)</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Click avatar to upload (max 5MB)</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
               {error}
             </div>
           )}
@@ -343,13 +343,13 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
         </form>
 
         {/* Password Change Section */}
-        <div className="border-l border-gray-200 pl-6 w-1/2">
+        <div className="border-l border-gray-200 dark:border-gray-700 pl-6 w-1/2">
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Change Password</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Change Password</h3>
 
             {/* Password Error Message */}
             {passwordError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 text-sm">
                 {passwordError}
               </div>
             )}

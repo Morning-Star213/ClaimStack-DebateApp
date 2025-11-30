@@ -224,10 +224,10 @@ export default function ClaimDetailPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div
-          className="inline-flex items-center text-base sm:text-lg lg:text-xl font-semibold text-gray-600 hover:text-gray-900 mb-4 sm:mb-6"
+          className="inline-flex items-center text-base sm:text-lg lg:text-xl font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-4 sm:mb-6 transition-colors"
         >
           <Link href="/browse">
             <ChevronLeftIcon className="w-7 h-7 mr-3 sm:mr-6" />
@@ -239,13 +239,13 @@ export default function ClaimDetailPage() {
         </div>
 
         {/* Statement Section */}
-        <div className="bg-[#F9F9F9] rounded-2xl sm:rounded-[32px] border border-[#DCDCDC] p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className="bg-[#F9F9F9] dark:bg-gray-800 rounded-2xl sm:rounded-[32px] border border-[#DCDCDC] dark:border-gray-700 p-4 sm:p-6 mb-6 sm:mb-8 transition-colors">
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div className="flex items-center">
-              <h2 className="text-sm sm:text-base font-normal text-[#666666]">Statement</h2>
+              <h2 className="text-sm sm:text-base font-normal text-[#666666] dark:text-gray-400">Statement</h2>
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6 sm:mb-10 leading-tight">
+          <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-gray-100 mb-6 sm:mb-10 leading-tight">
             {claimLoading ? 'Loading...' : (claim?.title || 'Claim not found')}
           </p>
           
@@ -253,11 +253,11 @@ export default function ClaimDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 py-6 items-stretch">
             {/* Left Section: Media Display */}
             <div className="flex flex-col space-y-1 h-full">
-              <h2 className="text-xl font-semibold text-[#030303] mb-1">Media</h2>
+              <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-1">Media</h2>
               <div className="flex-1 flex flex-col">
                 {claimLoading ? (
-                  <div className="w-full flex-1 bg-gray-200 rounded-lg flex items-center justify-center min-h-[400px]">
-                    <p className="text-gray-500 text-sm">Loading...</p>
+                  <div className="w-full flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center min-h-[400px]">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">Loading...</p>
                   </div>
                 ) : (claim?.fileUrl || claim?.url) ? (
                   <div className="flex-1">
@@ -271,53 +271,53 @@ export default function ClaimDetailPage() {
                     />
                   </div>
                 ) : (
-                  <div className="w-full flex-1 bg-gray-200 rounded-lg flex items-center justify-center min-h-[400px]">
-                    <p className="text-gray-500 text-sm">No media available</p>
+                  <div className="w-full flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center min-h-[400px]">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">No media available</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Right Section: Detailed Metadata */}
-            <div className="space-y-5 border-l border-gray-200 pl-8 h-full">
-              <h2 className="text-xl font-semibold text-[#030303] mb-5">Description</h2>
+            <div className="space-y-5 border-l border-gray-200 dark:border-gray-700 pl-8 h-full">
+              <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-5">Description</h2>
               {claimLoading ? (
-                <p className="text-sm sm:text-base text-gray-500 leading-relaxed mb-6 sm:mb-8">Loading...</p>
+                <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed mb-6 sm:mb-8">Loading...</p>
               ) : claim?.description ? (
-                <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-6 sm:mb-8">
+                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-6 sm:mb-8">
                   {claim.description}
                 </p>
               ) : null}
               {!claimLoading && claim?.forSummary && (
                 <div>
-                  <h2 className="text-xl font-semibold text-[#030303] mb-5">AI Summary</h2>
-                  <p className="text-sm text-[#030303]">{claim.forSummary}</p>
+                  <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-5">AI Summary</h2>
+                  <p className="text-sm text-[#030303] dark:text-gray-200">{claim.forSummary}</p>
                 </div>
               )}              
-              <h2 className="text-xl font-semibold text-[#030303] mb-5 pt-10">Details</h2>
+              <h2 className="text-xl font-semibold text-[#030303] dark:text-gray-100 mb-5 pt-10">Details</h2>
               
               {claimLoading ? (
                 <div className="space-y-4 text-sm">
-                  <p className="text-gray-500">Loading details...</p>
+                  <p className="text-gray-500 dark:text-gray-400">Loading details...</p>
                 </div>
               ) : (
               <div className="space-y-4 text-sm">
                 <div className="grid grid-cols-2 gap-4">
                   {claim?.category && (
                     <div>
-                      <span className="text-gray-600">Category:</span>
-                      <span className="ml-2 font-medium text-[#030303]">{claim.category.name}</span>
+                      <span className="text-gray-600 dark:text-gray-400">Category:</span>
+                      <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{claim.category.name}</span>
                     </div>
                   )}
                   
                   {claim?.status && (
                     <div>
-                      <span className="text-gray-600">Status:</span>
+                      <span className="text-gray-600 dark:text-gray-400">Status:</span>
                       <span className={`ml-2 font-medium capitalize ${
-                        claim.status === 'approved' ? 'text-green-600' :
-                        claim.status === 'rejected' ? 'text-red-600' :
-                        claim.status === 'pending' ? 'text-yellow-600' :
-                        'text-gray-600'
+                        claim.status === 'approved' ? 'text-green-600 dark:text-green-400' :
+                        claim.status === 'rejected' ? 'text-red-600 dark:text-red-400' :
+                        claim.status === 'pending' ? 'text-yellow-600 dark:text-yellow-400' :
+                        'text-gray-600 dark:text-gray-400'
                       }`}>
                         {claim.status}
                       </span>
@@ -326,15 +326,15 @@ export default function ClaimDetailPage() {
                   
                   {claim?.viewCount !== undefined && (
                     <div>
-                      <span className="text-gray-600">Views:</span>
-                      <span className="ml-2 font-medium text-[#030303]">{claim.viewCount}</span>
+                      <span className="text-gray-600 dark:text-gray-400">Views:</span>
+                      <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{claim.viewCount}</span>
                     </div>
                   )}
                   
                   {claim?.user && (
                     <div>
-                      <span className="text-gray-600">Author:</span>
-                      <span className="ml-2 font-medium text-[#030303]">
+                      <span className="text-gray-600 dark:text-gray-400">Author:</span>
+                      <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">
                         {claim.user.firstName && claim.user.lastName
                           ? `${claim.user.firstName} ${claim.user.lastName}`
                           : claim.user.username}
@@ -344,8 +344,8 @@ export default function ClaimDetailPage() {
                   
                   {claim?.createdAt && (
                     <div>
-                      <span className="text-gray-600">Created:</span>
-                      <span className="ml-2 font-medium text-[#030303]">
+                      <span className="text-gray-600 dark:text-gray-400">Created:</span>
+                      <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">
                         {new Date(claim.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -353,11 +353,11 @@ export default function ClaimDetailPage() {
                   
                   {claim?.totalScore !== undefined && (
                     <div>
-                      <span className="text-gray-600">Score:</span>
+                      <span className="text-gray-600 dark:text-gray-400">Score:</span>
                       <span className={`ml-2 text-lg font-semibold ${
-                        claim.totalScore > 0 ? 'text-green-600' :
-                        claim.totalScore < 0 ? 'text-red-600' :
-                        'text-gray-600'
+                        claim.totalScore > 0 ? 'text-green-600 dark:text-green-400' :
+                        claim.totalScore < 0 ? 'text-red-600 dark:text-red-400' :
+                        'text-gray-600 dark:text-gray-400'
                       }`}>
                         {claim.totalScore > 0 ? '+' : ''}{claim.totalScore}
                       </span>
@@ -366,19 +366,19 @@ export default function ClaimDetailPage() {
                   
                   {claim?.followCount !== undefined && (
                     <div>
-                      <span className="text-gray-600">Followers:</span>
-                      <span className="ml-2 font-medium text-[#030303]">{claim.followCount || 0}</span>
+                      <span className="text-gray-600 dark:text-gray-400">Followers:</span>
+                      <span className="ml-2 font-medium text-[#030303] dark:text-gray-100">{claim.followCount || 0}</span>
                     </div>
                   )}
                 </div>
 
                 {(claim?.upvotes !== undefined || claim?.downvotes !== undefined) && (
                   <div>
-                    <span className="text-gray-600">Total Votes:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Total Votes:</span>
                     <span className="ml-2">
-                      <span className="font-medium text-blue-600">{claim.upvotes || 0} Upvotes</span>
-                      <span className="mx-2 text-gray-400">/</span>
-                      <span className="font-medium text-red-600">{claim.downvotes || 0} Downvotes</span>
+                      <span className="font-medium text-blue-600 dark:text-blue-400">{claim.upvotes || 0} Upvotes</span>
+                      <span className="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                      <span className="font-medium text-red-600 dark:text-red-400">{claim.downvotes || 0} Downvotes</span>
                     </span>
                   </div>
                 )}
@@ -387,9 +387,9 @@ export default function ClaimDetailPage() {
             </div>
           </div>
           {/* Toggle Summaries Button */}
-          <div className="flex items-center justify-end pt-6 mt-6 border-t border-gray-200">
+          <div className="flex items-center justify-end pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
             <button 
-              className="text-black hover:text-gray-600 p-1 flex items-center gap-2"
+              className="text-black dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 p-1 flex items-center gap-2 transition-colors"
               onClick={() => setIsSummariesExpanded(!isSummariesExpanded)}
               aria-label="Toggle summaries"
             >
@@ -406,7 +406,7 @@ export default function ClaimDetailPage() {
           
           {/* Summaries */}
           {isSummariesExpanded && claim && (
-            <div className="pt-6 mt-6 border-t border-gray-200">
+            <div className="pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
               <ClaimSummary 
                 evidence={evidence}
               />
@@ -418,7 +418,7 @@ export default function ClaimDetailPage() {
         {/* Supporting Evidence Section */}
         <div className="mb-6 sm:mb-8 mt-6 sm:mt-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-[32px] font-semibold text-gray-900">Supporting Evidence</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-[32px] font-semibold text-gray-900 dark:text-gray-100">Supporting Evidence</h2>
             <div className='flex flex-row gap-2'>
               <Button
                 variant="primary"
@@ -449,14 +449,14 @@ export default function ClaimDetailPage() {
               <button
                 className={`px-3 sm:px-4 py-2 rounded-full border text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 ${
                   sortBy === 'recent'
-                    ? 'bg-white border-blue-600 text-blue-600'
-                    : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
+                    ? 'bg-white dark:bg-gray-800 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => setSortBy('recent')}
               >
                 Recent
               </button>
-              <button className="px-3 sm:px-4 py-2 rounded-full border border-gray-300 bg-white text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-2">
+              <button className="px-3 sm:px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors">
                 <SortAscIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Sort</span>
               </button>
@@ -470,17 +470,17 @@ export default function ClaimDetailPage() {
 
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-gray-600">Loading evidence and perspectives...</div>
+              <div className="text-gray-600 dark:text-gray-400">Loading evidence and perspectives...</div>
             </div>
           ) : error ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-red-600">Error: {error}</div>
+              <div className="text-red-600 dark:text-red-400">Error: {error}</div>
             </div>
           ) : currentItems.length === 0 ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <p className="text-gray-600 mb-4">No {position === 'for' ? 'supporting' : 'opposing'} evidence or perspectives yet</p>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">No {position === 'for' ? 'supporting' : 'opposing'} evidence or perspectives yet</p>
+                <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
                   (Total evidence: {evidence.length}, Total perspectives: {perspectives.length})
                 </p>
               </div>

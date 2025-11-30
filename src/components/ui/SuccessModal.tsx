@@ -60,12 +60,12 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           </div>
 
           {/* Title */}
-          <h2 className="text-2xl font-semibold text-gray-900 mb-1">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
             {title || defaultTitle}
           </h2>
 
           {/* Subtitle */}
-          <p className="text-sm font-normal text-gray-600">
+          <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
             {subtitle || defaultSubtitle}
           </p>
         </div>
