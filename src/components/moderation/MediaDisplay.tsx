@@ -389,8 +389,15 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
         // Clear interval after 5 seconds
         setTimeout(() => clearInterval(checkTwitterScript), 5000)
       }
+    } else if (platform === 'YouTube') {
+      // For YouTube, ensure the iframe fills the container
+      const iframe = embedContainerRef.current.querySelector('iframe')
+      if (iframe) {
+        iframe.style.width = '100%'
+        iframe.style.height = '100%'
+        iframe.style.minHeight = '600px'
+      }
     }
-    // For YouTube, the HTML is already a complete iframe, so no additional processing needed
   }, [oEmbedData, url])
 
   return (
@@ -415,11 +422,11 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
           
           if (fileCategory === 'video' && !fileError) {
             return (
-              <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+              <div className="w-full h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                 <video
                   src={fileUrl}
                   controls
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                   onError={() => setFileError(true)}
                 >
                   Your browser does not support the video tag.
@@ -882,7 +889,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                     <div className="text-blue-600">{icon}</div>
                     <span className="font-medium">{platform}</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-lg flex items-center justify-center" style={{ minHeight: '400px' }}>
+                  <div className="w-full h-[600px] bg-gray-200 rounded-lg flex items-center justify-center">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
                       <p className="text-sm text-gray-600">Loading embed...</p>
@@ -914,9 +921,8 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                   </div>
                   <div 
                     ref={embedContainerRef}
-                    className="w-full rounded-lg overflow-hidden flex items-center justify-center"
+                    className="w-full h-[600px] rounded-lg overflow-hidden"
                     style={{ 
-                      minHeight: platform === 'YouTube' ? '400px' : platform === 'TikTok' ? '500px' : '400px',
                       backgroundColor: platform === 'TikTok' ? '#000' : '#fff'
                     }}
                   />
@@ -945,7 +951,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                         <div className="text-blue-600">{icon}</div>
                         <span className="font-medium">{platform}</span>
                       </div>
-                      <div className="w-full aspect-video bg-black rounded-lg overflow-hidden">
+                      <div className="w-full h-[600px] bg-black rounded-lg overflow-hidden">
                         <iframe
                           src={`https://www.youtube.com/embed/${videoId}`}
                           title="YouTube video player"
