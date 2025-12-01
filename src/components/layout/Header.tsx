@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
@@ -29,13 +30,20 @@ export const Header: React.FC = () => {
   const canAccessAdminFeatures = isAdmin || isModerator
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo and Navigation */}
           <div className="flex items-center space-x-4 sm:space-x-6 lg:space-x-8">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-lg sm:text-xl font-semibold text-gray-900">ClaimStack</span>
+              <Image
+                src="/images/logo.png"
+                alt="ClaimStack Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+              <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">ClaimStack</span>
             </Link>
 
             {/* Navigation Links */}
@@ -45,8 +53,8 @@ export const Header: React.FC = () => {
                   href="/browse"
                   className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     isBrowseActive
-                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                   }`}
                 >
                   Browse Claims
@@ -56,8 +64,8 @@ export const Header: React.FC = () => {
                     href="/moderation"
                     className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                       isModerationActive
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                     }`}
                   >
                     Moderation Pannel
@@ -68,8 +76,8 @@ export const Header: React.FC = () => {
                     href="/admin/users"
                     className={`px-3 lg:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                       isUserManagementActive
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                     }`}
                   >
                     User Management Panel
@@ -106,7 +114,7 @@ export const Header: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900"
+              className="md:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
               aria-label="Toggle menu"
             >
               <MenuIcon className="w-6 h-6" />
@@ -116,7 +124,7 @@ export const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
             <nav className="flex flex-col space-y-4">
               <Button 
                 variant="primary" 
@@ -136,8 +144,8 @@ export const Header: React.FC = () => {
                     onClick={() => setIsMenuOpen(false)}
                     className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
                       isBrowseActive
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                     }`}
                   >
                     Browse Claims
@@ -148,8 +156,8 @@ export const Header: React.FC = () => {
                       onClick={() => setIsMenuOpen(false)}
                       className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
                         isModerationActive
-                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                          : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                       }`}
                     >
                       Moderation Pannel
@@ -161,8 +169,8 @@ export const Header: React.FC = () => {
                       onClick={() => setIsMenuOpen(false)}
                       className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
                         isUserManagementActive
-                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                          : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                       }`}
                     >
                       User Management Panel

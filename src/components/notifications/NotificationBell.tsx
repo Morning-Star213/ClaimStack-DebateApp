@@ -11,7 +11,7 @@ export const NotificationBell: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-1.5 sm:p-2 text-gray-600 hover:text-gray-900 transition-colors"
+        className="relative p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         aria-label="Notifications"
       >
         <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@ export const NotificationBell: React.FC = () => {
           />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+          <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-800" />
         )}
       </button>
 
@@ -33,7 +33,7 @@ export const NotificationBell: React.FC = () => {
             className="fixed inset-0 z-40 bg-black bg-opacity-50"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-[-60px] top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 overflow-y-auto">
+          <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-[-60px] top-1/2 sm:top-auto -translate-y-1/2 sm:translate-y-0 sm:mt-2 w-[calc(100%-2rem)] sm:w-96 max-h-[90vh] sm:max-h-[80vh] bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-y-auto transition-colors">
             <NotificationList onClose={() => setIsOpen(false)} />
           </div>
         </>

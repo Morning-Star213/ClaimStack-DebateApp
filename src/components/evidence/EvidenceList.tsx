@@ -33,7 +33,7 @@ export const EvidenceList: React.FC<EvidenceListProps> = ({
   if (evidence.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">No evidence found.</p>
+        <p className="text-gray-500 dark:text-gray-400">No evidence found.</p>
       </div>
     )
   }

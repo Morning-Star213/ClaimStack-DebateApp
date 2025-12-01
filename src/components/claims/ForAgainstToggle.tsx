@@ -32,8 +32,8 @@ export const ForAgainstToggle: React.FC<ForAgainstToggleProps> = ({
           'px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-1 sm:gap-2 border',
           fullWidth && 'flex-1',
           position === 'for'
-            ? 'bg-blue-50 text-blue-600 border-blue-200'
-            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-700'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
         )}
       >
         <span>For</span>
@@ -41,7 +41,7 @@ export const ForAgainstToggle: React.FC<ForAgainstToggleProps> = ({
           <span
             className={cn(
               'w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-xs font-medium',
-              position === 'for' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+              position === 'for' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
             )}
           >
             {forCount}
@@ -54,8 +54,8 @@ export const ForAgainstToggle: React.FC<ForAgainstToggleProps> = ({
           'px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-1 sm:gap-2 border',
           fullWidth && 'flex-1',
           position === 'against'
-            ? 'bg-red-50 text-red-600 border-red-200'
-            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+            ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
         )}
       >
         <span>Against</span>
@@ -63,7 +63,7 @@ export const ForAgainstToggle: React.FC<ForAgainstToggleProps> = ({
           <span
             className={cn(
               'w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-xs font-medium',
-              position === 'against' ? 'bg-red-600 text-white' : 'bg-red-100 text-red-600'
+              position === 'against' ? 'bg-red-600 dark:bg-red-500 text-white' : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
             )}
           >
             {againstCount}

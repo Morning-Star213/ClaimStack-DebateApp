@@ -14,6 +14,7 @@ export interface VoteButtonsProps {
   disabled?: boolean
   itemId?: string
   itemType?: 'claim' | 'evidence' | 'perspective'
+  onDropdownChange?: (isOpen: boolean) => void // Callback when dropdown opens/closes
 }
 
 interface Voter {
@@ -32,6 +33,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   disabled,
   itemId,
   itemType,
+  onDropdownChange,
 }) => {
   const { requireAuth } = useRequireAuth()
   const [upvotes, setUpvotes] = useState(initialUpvotes)
@@ -71,6 +73,12 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Notify parent when dropdown state changes
+  useEffect(() => {
+    const isOpen = showUpvoteDropdown || showDownvoteDropdown
+    onDropdownChange?.(isOpen)
+  }, [showUpvoteDropdown, showDownvoteDropdown, onDropdownChange])
 
   // Fetch voters when dropdown opens
   const fetchVoters = async (voteType: 'upvote' | 'downvote') => {
@@ -132,6 +140,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         }
       }
       setShowDownvoteDropdown(false)
+      // Notify parent about dropdown state change
+      onDropdownChange?.(newState)
     } else {
       const newState = !showDownvoteDropdown
       setShowDownvoteDropdown(newState)
@@ -143,6 +153,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         }
       }
       setShowUpvoteDropdown(false)
+      // Notify parent about dropdown state change
+      onDropdownChange?.(newState)
     }
   }
 
@@ -222,7 +234,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   const renderVoterList = (voters: Voter[], voteType: 'upvote' | 'downvote') => {
     if (loadingVoters) {
       return (
-        <div className="px-3 py-2 text-xs text-gray-500 text-center">
+        <div className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 text-center">
           Loading...
         </div>
       )
@@ -230,7 +242,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
 
     if (voters.length === 0) {
       return (
-        <div className="px-3 py-2 text-xs text-gray-500 text-center">
+        <div className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 text-center">
           No {voteType === 'upvote' ? 'upvoters' : 'downvoters'} yet
         </div>
       )
@@ -241,7 +253,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
         {voters.map((voter) => (
           <div
             key={voter.id}
-            className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             {voter.user.avatarUrl ? (
               <img
@@ -250,13 +262,13 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
                 className="w-6 h-6 rounded-full object-cover"
               />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center">
-                <span className="text-xs text-gray-600">
+              <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                <span className="text-xs text-gray-600 dark:text-gray-300">
                   {voter.user.username?.[0]?.toUpperCase() || 'U'}
                 </span>
               </div>
             )}
-            <span className="text-xs text-gray-700 font-medium">
+            <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">
               @{voter.user.username}
             </span>
           </div>
@@ -268,7 +280,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       {/* Upvote Button with Dropdown */}
-      <div ref={upvoteDropdownRef} className="relative">
+      <div ref={upvoteDropdownRef} className="relative z-[100]">
         <button
           ref={upvoteButtonRef}
           onClick={(e) => {
@@ -279,8 +291,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
           className={cn(
             'flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border transition-colors',
             userVote === 'upvote'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-blue-200 text-blue-600 hover:border-blue-400',
+              ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400'
+              : 'border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:border-blue-400 dark:hover:border-blue-600',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -290,11 +302,11 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
 
         {showUpvoteDropdown && (
           <div className={cn(
-            'absolute right-0 w-56 bg-white border border-gray-200 rounded-3xl shadow-lg z-50',
+            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[100]',
             upvoteDropdownDirection === 'down' ? 'top-full mt-2' : 'bottom-full mb-2'
           )}>
             {/* Vote Button at Top */}
-            <div className="border-b border-gray-200 p-2">
+            <div className="border-b border-gray-200 dark:border-gray-700 p-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -305,8 +317,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
                 className={cn(
                   'w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border transition-colors',
                   userVote === 'upvote'
-                    ? 'border-blue-600 text-blue-600 bg-blue-50'
-                    : 'border-blue-200 text-blue-600 hover:border-blue-400',
+                    ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
+                    : 'border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:border-blue-400 dark:hover:border-blue-600',
                   (disabled || isVoting) && 'opacity-50 cursor-not-allowed'
                 )}
               >
@@ -323,7 +335,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
       </div>
 
       {/* Downvote Button with Dropdown */}
-      <div ref={downvoteDropdownRef} className="relative">
+      <div ref={downvoteDropdownRef} className="relative z-[100]">
         <button
           ref={downvoteButtonRef}
           onClick={(e) => {
@@ -334,8 +346,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
           className={cn(
             'flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border transition-colors',
             userVote === 'downvote'
-              ? 'border-red-600 text-red-600'
-              : 'border-red-200 text-red-600 hover:border-red-400',
+              ? 'border-red-600 dark:border-red-500 text-red-600 dark:text-red-400'
+              : 'border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:border-red-400 dark:hover:border-red-600',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -345,11 +357,11 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
 
         {showDownvoteDropdown && (
           <div className={cn(
-            'absolute right-0 w-56 bg-white border border-gray-200 rounded-3xl shadow-lg z-50',
+            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[100]',
             downvoteDropdownDirection === 'down' ? 'top-full mt-2' : 'bottom-full mb-2'
           )}>
             {/* Vote Button at Top */}
-            <div className="border-b border-gray-200 p-2">
+            <div className="border-b border-gray-200 dark:border-gray-700 p-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -360,8 +372,8 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
                 className={cn(
                   'w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border transition-colors',
                   userVote === 'downvote'
-                    ? 'border-red-600 text-red-600 bg-red-50'
-                    : 'border-red-200 text-red-600 hover:border-red-400',
+                    ? 'border-red-600 dark:border-red-500 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900'
+                    : 'border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:border-red-400 dark:hover:border-red-600',
                   (disabled || isVoting) && 'opacity-50 cursor-not-allowed'
                 )}
               >

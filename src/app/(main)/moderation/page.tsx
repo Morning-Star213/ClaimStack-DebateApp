@@ -76,8 +76,8 @@ export default function ModerationPage() {
   // Don't render if still loading or user is not admin
   if (authLoading) {
     return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center transition-colors">
+        <p className="text-gray-600 dark:text-gray-400">Loading...</p>
       </div>
     )
   }
@@ -258,21 +258,21 @@ export default function ModerationPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-8 gap-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-[46px] font-semibold text-[#030303]">Moderation Pannel</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-[46px] font-semibold text-[#030303] dark:text-gray-100">Moderation Pannel</h1>
           <div className="flex-1 max-w-full sm:ml-8">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <SearchIcon className="w-5 h-5 text-gray-400" />
+                <SearchIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
               </div>
               <input
                 type="text"
                 placeholder="Search claims, topics, or keywords..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-2 sm:py-3 bg-gray-100 border border-gray-200 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-12 pr-4 py-2 sm:py-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
               />
             </div>
           </div>
@@ -286,8 +286,8 @@ export default function ModerationPage() {
                 onClick={() => setActiveTab(option.id)}
                 className={`px-3 sm:px-4 py-[6px] rounded-full text-xs sm:text-sm font-medium transition-colors ${
                   activeTab === option.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    ? 'bg-blue-500 dark:bg-blue-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 {option.label}
@@ -305,38 +305,38 @@ export default function ModerationPage() {
 
         {(isLoadingPending || isLoadingRejected) && (
           <div className="text-center py-8">
-            <p className="text-gray-600">Loading claims...</p>
+            <p className="text-gray-600 dark:text-gray-400">Loading claims...</p>
           </div>
         )}
 
         {error && (
           <div className="text-center py-8">
-            <p className="text-red-600">Error: {error}</p>
+            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
           </div>
         )}
 
         {!isLoadingPending && !isLoadingRejected && !error && filteredItems.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-600">No pending or rejected claims to review.</p>
+            <p className="text-gray-600 dark:text-gray-400">No pending or rejected claims to review.</p>
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredItems.map((item) => (
             <Card key={item.id} className="p-4 sm:p-6 rounded-lg sm:rounded-[32px]">
-              <div className="border-b border-gray-200 mb-3 sm:mb-4">
+              <div className="border-b border-gray-200 dark:border-gray-700 mb-3 sm:mb-4">
                 <div className="flex items-start justify-between mb-3 sm:mb-4">
-                  <span className="px-2 sm:px-3 py-1 sm:py-2 bg-gray-200 text-black text-xs font-medium rounded-full">
+                  <span className="px-2 sm:px-3 py-1 sm:py-2 bg-gray-200 dark:bg-gray-700 text-black dark:text-gray-100 text-xs font-medium rounded-full">
                     Claim
                   </span>
                   {item.status === 'pending' && (
-                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-yellow-200 text-yellow-800 text-xs font-medium rounded-full flex items-center space-x-1">
+                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-yellow-200 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 text-xs font-medium rounded-full flex items-center space-x-1">
                       <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                       <span>Pending</span>
                     </span>
                   )}
                   {item.status === 'reviewed' && (
-                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-red-200 text-red-800 text-xs font-medium rounded-full flex items-center space-x-1">
+                    <span className="px-2 sm:px-3 py-1 sm:py-2 bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-300 text-xs font-medium rounded-full flex items-center space-x-1">
                       <FlagIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                       <span>Rejected</span>
                     </span>
@@ -344,25 +344,25 @@ export default function ModerationPage() {
                 </div>
               </div>
               <div className="mb-3 sm:mb-4">
-                <div className="border-b border-gray-200 mb-3 sm:mb-4">
+                <div className="border-b border-gray-200 dark:border-gray-700 mb-3 sm:mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs sm:text-sm text-black">{item.user}</span>
-                    <span className="text-xs sm:text-sm text-black">{item.date}</span>
+                    <span className="text-xs sm:text-sm text-black dark:text-gray-100">{item.user}</span>
+                    <span className="text-xs sm:text-sm text-black dark:text-gray-100">{item.date}</span>
                   </div>
-                  <h3 className="text-base sm:text-lg font-semibold text-blue-600 mb-2 sm:mb-3">{item.title}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-600 dark:text-blue-400 mb-2 sm:mb-3">{item.title}</h3>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-gray-600 border-b border-gray-200 mb-3 sm:mb-4 pb-3 sm:pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 mb-3 sm:mb-4 pb-3 sm:pb-4">
                   <span className="flex items-center space-x-1">
                     <FlagIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>Flagged by: <strong className="text-[#030303]">{item.flaggedBy} users</strong></span>
+                    <span>Flagged by: <strong className="text-[#030303] dark:text-gray-200">{item.flaggedBy} users</strong></span>
                   </span>
                   <span className="flex items-center space-x-1">
                     <QuestionMarkIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>Reasons: <strong className="text-[#030303]">{item.reason}</strong></span>
+                    <span>Reasons: <strong className="text-[#030303] dark:text-gray-200">{item.reason}</strong></span>
                   </span>
                 </div>
                 {item.link && (
-                  <p className="text-xs sm:text-sm text-blue-600 mt-2 flex items-center space-x-1 border-b border-gray-200 mb-3 sm:mb-4 pb-3 sm:pb-4">
+                  <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center space-x-1 border-b border-gray-200 dark:border-gray-700 mb-3 sm:mb-4 pb-3 sm:pb-4">
                     <LinkIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="break-all">{item.link}</span>
                   </p>
@@ -371,7 +371,7 @@ export default function ModerationPage() {
 
               <button
                 onClick={() => handleReview(item)}
-                className="w-full px-4 py-2 sm:py-3 border border-gray-200 text-black text-xs sm:text-sm font-medium rounded-full hover:bg-gray-200 transition-colors"
+                className="w-full px-4 py-2 sm:py-3 border border-gray-200 dark:border-gray-700 text-black dark:text-gray-100 text-xs sm:text-sm font-medium rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               >
                 Review Item
               </button>
