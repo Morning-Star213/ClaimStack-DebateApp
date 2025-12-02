@@ -280,7 +280,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       {/* Upvote Button with Dropdown */}
-      <div ref={upvoteDropdownRef} className="relative z-[100]">
+      <div ref={upvoteDropdownRef} className="relative z-[10]">
         <button
           ref={upvoteButtonRef}
           onClick={(e) => {
@@ -302,7 +302,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
 
         {showUpvoteDropdown && (
           <div className={cn(
-            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[100]',
+            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[10]',
             upvoteDropdownDirection === 'down' ? 'top-full mt-2' : 'bottom-full mb-2'
           )}>
             {/* Vote Button at Top */}
@@ -335,7 +335,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
       </div>
 
       {/* Downvote Button with Dropdown */}
-      <div ref={downvoteDropdownRef} className="relative z-[100]">
+      <div ref={downvoteDropdownRef} className="relative z-[10]">
         <button
           ref={downvoteButtonRef}
           onClick={(e) => {
@@ -357,7 +357,7 @@ export const VoteButtons: React.FC<VoteButtonsProps> = ({
 
         {showDownvoteDropdown && (
           <div className={cn(
-            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[100]',
+            'absolute right-0 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-lg z-[10]',
             downvoteDropdownDirection === 'down' ? 'top-full mt-2' : 'bottom-full mb-2'
           )}>
             {/* Vote Button at Top */}
