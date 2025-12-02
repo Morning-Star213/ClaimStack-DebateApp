@@ -159,12 +159,14 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
   const [pdfLoadTimeout, setPdfLoadTimeout] = useState(false)
   const [websiteIframeError, setWebsiteIframeError] = useState(false)
   const [showWebsiteFallback, setShowWebsiteFallback] = useState(false)
+  const [websiteIframeBlocked, setWebsiteIframeBlocked] = useState(false)
   const embedContainerRef = useRef<HTMLDivElement>(null)
   const scriptLoadedRef = useRef<{ [key: string]: boolean }>({})
   const pdfIframeRef = useRef<HTMLIFrameElement>(null)
   const urlPdfIframeRef = useRef<HTMLIFrameElement>(null)
   const websiteIframeRef = useRef<HTMLIFrameElement>(null)
   const pdfWebsiteIframeRef = useRef<HTMLIFrameElement>(null)
+  const websiteIframeLoadTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Reset file error when fileUrl or url changes
   useEffect(() => {
@@ -176,6 +178,11 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
     setPdfLoadTimeout(false)
     setWebsiteIframeError(false)
     setShowWebsiteFallback(false)
+    setWebsiteIframeBlocked(false)
+    if (websiteIframeLoadTimeoutRef.current) {
+      clearTimeout(websiteIframeLoadTimeoutRef.current)
+      websiteIframeLoadTimeoutRef.current = null
+    }
   }, [fileUrl, url])
 
   // Monitor PDF iframe for potential load issues (for external URLs that block embedding)
@@ -305,6 +312,51 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
       }
     }
   }, [oEmbedData, url])
+
+  // Detect iframe blocking for regular websites
+  useEffect(() => {
+    if (!url) return
+    
+    const { platform, isEmbeddable } = getPlatformFromUrl(url)
+    const isRegularWebsite = !isPdfUrl(url) && !isEmbeddable
+    
+    if (!isRegularWebsite) return
+    
+    // Set a timeout to detect if iframe might be blocked
+    // Many websites block embedding with X-Frame-Options
+    websiteIframeLoadTimeoutRef.current = setTimeout(() => {
+      if (websiteIframeRef.current && !websiteIframeError) {
+        try {
+          const iframe = websiteIframeRef.current
+          // Try to access iframe content (will fail for cross-origin, which is normal)
+          // But if the iframe shows a browser error page, we can't detect it programmatically
+          // So we'll assume it might be blocked and show a helpful message
+          if (iframe.contentWindow) {
+            // Iframe loaded, but content might still be blocked
+            // We can't reliably detect X-Frame-Options blocking without trying to access content
+            // So we'll show a subtle indicator that embedding might be restricted
+            try {
+              // This will throw for cross-origin, which is expected
+              const test = iframe.contentWindow.location
+            } catch (e) {
+              // Cross-origin is normal - iframe might be working
+              // We can't determine if it's blocked without more info
+            }
+          }
+        } catch (error) {
+          // Error accessing iframe - might be blocked
+          console.log('Iframe access check (cross-origin is normal)')
+        }
+      }
+    }, 2000) // Check after 2 seconds
+    
+    return () => {
+      if (websiteIframeLoadTimeoutRef.current) {
+        clearTimeout(websiteIframeLoadTimeoutRef.current)
+        websiteIframeLoadTimeoutRef.current = null
+      }
+    }
+  }, [url, websiteIframeError])
 
   // Process oEmbed HTML and inject it into the container
   useEffect(() => {
@@ -1028,12 +1080,16 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
             // Check if this is a regular website (not PDF, not social media)
             const isRegularWebsite = !isPdfUrl(url) && !isEmbeddable
             
-            if (isRegularWebsite && !websiteIframeError) {
+            // Always display regular websites in iframe using proxy
+            if (isRegularWebsite) {
+              // Use proxy to bypass X-Frame-Options restrictions
+              const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`
+              
               return (
                 <div className="flex flex-col space-y-3">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2 text-sm text-gray-700">
-                      <div className="text-blue-600">{icon}</div>
+                    <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                      <div className="text-blue-600 dark:text-blue-400">{icon}</div>
                       <span className="font-medium">{platform}</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1041,40 +1097,47 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium underline"
                       >
                         Open in new tab
                       </a>
                     </div>
                   </div>
-                  <div className="w-full h-[600px] bg-gray-200 rounded-lg overflow-hidden border border-gray-300 relative">
+                  <div className="w-full h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 relative">
                     <iframe
                       ref={websiteIframeRef}
-                      src={url}
+                      src={proxyUrl}
                       className="w-full h-full border-0"
                       title="External Website"
                       style={{ minHeight: '600px' }}
-                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
-                      onError={() => setWebsiteIframeError(true)}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      loading="lazy"
+                      onError={() => {
+                        setWebsiteIframeError(true)
+                      }}
                       onLoad={() => {
                         // Reset error on successful load
                         setWebsiteIframeError(false)
+                        setWebsiteIframeBlocked(false)
+                        console.log('Website iframe loaded successfully via proxy')
                       }}
                     />
                     {websiteIframeError && (
-                      <div className="absolute inset-0 bg-white flex items-center justify-center p-6">
+                      <div className="absolute inset-0 bg-white dark:bg-gray-800 flex items-center justify-center p-6 z-10">
                         <div className="text-center">
-                          <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
-                          <p className="text-sm text-gray-700 mb-2">
-                            This website cannot be embedded due to security restrictions.
+                          <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                            Failed to load website content.
                           </p>
                           <a
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
+                            className="inline-flex items-center px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
                           >
                             Open in new tab
                           </a>
@@ -1086,7 +1149,7 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-xs break-all underline flex items-start space-x-2"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs break-all underline flex items-start space-x-2"
                   >
                     <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
                     <span className="break-all">{url}</span>
@@ -1094,6 +1157,25 @@ export const MediaDisplay: React.FC<MediaDisplayProps> = ({
                 </div>
               )
             }
+            
+            // Final fallback: Show link for any URL that doesn't match above conditions
+            return (
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 mb-2">
+                  <div className="text-blue-600 dark:text-blue-400">{icon}</div>
+                  <span className="font-medium">{platform}</span>
+                </div>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm break-all underline flex items-start space-x-2"
+                >
+                  <LinkIcon className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span className="break-all">{url}</span>
+                </a>
+              </div>
+            )
           })()}
         </div>
       )}
