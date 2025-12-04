@@ -27,6 +27,8 @@ export interface IClaim extends Document {
   fileName?: string
   fileSize?: number
   fileType?: string
+  seoTitle?: string
+  seoDescription?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -97,6 +99,12 @@ const ClaimSchema = new Schema<IClaim>(
       type: Number,
     },
     fileType: {
+      type: String,
+    },
+    seoTitle: {
+      type: String,
+    },
+    seoDescription: {
       type: String,
     },
   },

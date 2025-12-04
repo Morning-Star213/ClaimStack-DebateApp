@@ -382,6 +382,27 @@ export default function ClaimDetailPage() {
                     </span>
                   </div>
                 )}
+                
+                {/* SEO Metadata */}
+                {(claim?.seoTitle || claim?.seoDescription) && (
+                  <div className="pt-6 border-t border-gray-200 dark:border-gray-700 mt-6">
+                    <h3 className="text-lg font-semibold text-[#030303] dark:text-gray-100 mb-4">SEO Metadata</h3>
+                    <div className="space-y-3">
+                      {claim?.seoTitle && (
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400 text-sm">SEO Title:</span>
+                          <p className="mt-1 text-sm font-medium text-[#030303] dark:text-gray-100">{claim.seoTitle}</p>
+                        </div>
+                      )}
+                      {claim?.seoDescription && (
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400 text-sm">SEO Description:</span>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{claim.seoDescription}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               )}
             </div>

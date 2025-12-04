@@ -147,6 +147,8 @@ export async function GET(
         fileName: claim.fileName,
         fileSize: claim.fileSize,
         fileType: claim.fileType,
+        seoTitle: claim.seoTitle,
+        seoDescription: claim.seoDescription,
         createdAt: claim.createdAt,
         updatedAt: claim.updatedAt,
         user: claim.userId instanceof mongoose.Types.ObjectId ? undefined : {

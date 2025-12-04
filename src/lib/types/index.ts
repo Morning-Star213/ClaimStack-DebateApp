@@ -33,6 +33,8 @@ export interface Claim {
   fileName?: string
   fileSize?: number
   fileType?: string
+  seoTitle?: string
+  seoDescription?: string
   createdAt: Date
   updatedAt: Date
   user?: User

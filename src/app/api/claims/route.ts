@@ -5,7 +5,7 @@ import { Claim, Category, ClaimStatus } from '@/lib/db/models'
 import { ClaimVote, VoteType } from '@/lib/db/models'
 import { Flag } from '@/lib/db/models'
 import { uploadFile } from '@/lib/storage/upload'
-import { generateClaimSummary } from '@/lib/ai/summarize'
+import { generateClaimSummary, generateSEOMetadata } from '@/lib/ai/summarize'
 import mongoose from 'mongoose'
 import { z } from 'zod'
 
@@ -201,6 +201,8 @@ export async function GET(request: NextRequest) {
           fileName: claim.fileName,
           fileSize: claim.fileSize,
           fileType: claim.fileType,
+          seoTitle: claim.seoTitle,
+          seoDescription: claim.seoDescription,
           createdAt: claim.createdAt,
           updatedAt: claim.updatedAt,
           user: claim.userId && !(claim.userId instanceof mongoose.Types.ObjectId) ? {
@@ -359,6 +361,8 @@ export async function GET(request: NextRequest) {
         fileName: claim.fileName,
         fileSize: claim.fileSize,
         fileType: claim.fileType,
+        seoTitle: claim.seoTitle,
+        seoDescription: claim.seoDescription,
         createdAt: claim.createdAt,
         updatedAt: claim.updatedAt,
         user: claim.userId && !(claim.userId instanceof mongoose.Types.ObjectId) ? {
@@ -485,6 +489,34 @@ export async function POST(request: NextRequest) {
       fileType,
     })
 
+    // Populate claim with user and category
+    await claim.populate('userId', 'username email firstName lastName avatarUrl')
+    await claim.populate('categoryId', 'name slug')
+
+    // Generate SEO metadata (async, non-blocking)
+    const categoryName = claim.categoryId && !(claim.categoryId instanceof mongoose.Types.ObjectId)
+      ? (claim.categoryId as any).name
+      : undefined
+    
+    generateSEOMetadata({
+      claimTitle: title,
+      claimCategory: categoryName,
+      leadingSide: null, // Initially null, will be updated when score is calculated
+    })
+      .then(async (seoMetadata) => {
+        try {
+          await Claim.findByIdAndUpdate(claim._id, {
+            seoTitle: seoMetadata.seoTitle,
+            seoDescription: seoMetadata.seoDescription,
+          })
+        } catch (dbError) {
+          console.error('Error saving SEO metadata to database:', dbError)
+        }
+      })
+      .catch((error) => {
+        console.warn('SEO metadata generation completed with fallback or error:', error?.message || 'Unknown error')
+      })
+
     // Generate AI summary for claim (async, non-blocking)
     if (process.env.OPENAI_API_KEY && (url || fileUrl)) {
       generateClaimSummary({
@@ -512,10 +544,6 @@ export async function POST(request: NextRequest) {
           console.warn('Claim summary generation completed with fallback or error:', error?.message || 'Unknown error')
         })
     }
-
-    // Populate claim with user and category
-    await claim.populate('userId', 'username email firstName lastName avatarUrl')
-    await claim.populate('categoryId', 'name slug')
 
     const populatedClaim = await Claim.findById(claim._id)
       .populate('userId', 'username email firstName lastName avatarUrl')
@@ -552,6 +580,8 @@ export async function POST(request: NextRequest) {
         fileName: populatedClaim.fileName,
         fileSize: populatedClaim.fileSize,
         fileType: populatedClaim.fileType,
+        seoTitle: populatedClaim.seoTitle,
+        seoDescription: populatedClaim.seoDescription,
         createdAt: populatedClaim.createdAt,
         updatedAt: populatedClaim.updatedAt,
         user: populatedClaim.userId instanceof mongoose.Types.ObjectId ? undefined : {
